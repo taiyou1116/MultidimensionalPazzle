@@ -90,6 +90,10 @@ public class GameManager : MonoBehaviour
             func(direction);
         }
 
+        // nextの次が範囲外ならreturn
+        if (nextPlayerPositionOnTile.x == 8 || nextPlayerPositionOnTile.x == 0 || nextPlayerPositionOnTile.z == 8 || nextPlayerPositionOnTile.z == 0) {
+            return;
+        }
         nextPutPos3D = GetNextPlayerPositionOnTile(nextPlayerPositionOnTile,direction);
         
         for(int i = stage.MaxHierarchy-1; i >= 0; i--) {
@@ -111,7 +115,6 @@ public class GameManager : MonoBehaviour
         {
             // 範囲外
             Func<Vector3Int, bool> func = gimic.None;
-            // if (func(new Vector3Int(nextPlayerPositionOnTile.x,0,nextPlayerPositionOnTile.z) + (new Vector3Int(0,i,0)))) return;
             if (func(new Vector3Int(nextPlayerPositionOnTile.x,0,nextPlayerPositionOnTile.z) + (new Vector3Int(0,i,0)))) {
                 nextPlayerPositionOnTile = currentPlayerPositionOnTile;
                 return;
@@ -119,7 +122,6 @@ public class GameManager : MonoBehaviour
 
             // トラップが上部に存在するか
             func = gimic.HighPosTrap;
-            // if (func(new Vector3Int(nextPlayerPositionOnTile.x,0,nextPlayerPositionOnTile.z) + (new Vector3Int(0,i,0)))) return;
             if (func(new Vector3Int(nextPlayerPositionOnTile.x,0,nextPlayerPositionOnTile.z) + (new Vector3Int(0,i,0)))) {
                 nextPlayerPositionOnTile = currentPlayerPositionOnTile;
                 return;
@@ -129,6 +131,7 @@ public class GameManager : MonoBehaviour
             func = gimic.CheckMaxHigh;
             if (!func(new Vector3Int(nextPlayerPositionOnTile.x,i,nextPlayerPositionOnTile.z))) continue;
             
+            // itemget
             func = gimic.GetItem;
             func(gimic.Pos + Vector3Int.up);
 
