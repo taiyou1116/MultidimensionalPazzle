@@ -164,6 +164,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        // wallを壊す
         func = gimic.DestroyBlock;
         if (func(nextPlayerPositionOnTile)) {
             nextPlayerPositionOnTile = currentPlayerPositionOnTile;

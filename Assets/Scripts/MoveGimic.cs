@@ -297,6 +297,9 @@ public class MoveGimic : MonoBehaviour
         if (playerManager == null) {
             playerManager = stage.Player;
         }
+        if (ConfirmTileType(next + Vector3Int.up, new StageManager.TILE_TYPE[]{block})) {
+            return false;
+        }
         if (!ConfirmTileType(next, new StageManager.TILE_TYPE[]{wall})) {
             destroyCount = 0;
             if (wallobj != null) {
@@ -349,7 +352,8 @@ public class MoveGimic : MonoBehaviour
         // 見た目
         GameObject wallObj = Instantiate(wallPrefab, position, Quaternion.identity);
         GameObject smoke = Instantiate(Sounds.instance.effects[0],wallObj.transform.position + new Vector3(0,-0.5f,0),Quaternion.identity);
-
+        playerManager.stoneCount--;
+        mainUI.stoneText.text = playerManager.stoneCount.ToString();
         // タイル情報を格納
         stage.moveObjPositionOnTile.Add(wallObj, position);
         stage.tileAll[position.x,position.y,position.z] = wall;
