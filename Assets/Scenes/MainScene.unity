@@ -6195,6 +6195,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stage: {fileID: 699546799}
   wallPrefab: {fileID: 5536474021811327002, guid: 300687a8516bb494a9cf2a127cbcdd8f, type: 3}
+  itemPrefab: {fileID: 2515852710866534986, guid: 3cb183eaf1b24fc4bb284d85a096150b, type: 3}
 --- !u!4 &741271450
 Transform:
   m_ObjectHideFlags: 0
@@ -7097,6 +7098,7 @@ MonoBehaviour:
   textAnim: {fileID: 2009145838}
   textAnimonline: {fileID: 1389937730}
   operation: {fileID: 1940628039}
+  oldTileType: 
   transparentMaterial: {fileID: 2100000, guid: d6ca4e2b9d730d343b0a775cb0a5e376, type: 2}
   opaqueMaterial: {fileID: 2100000, guid: 9974d02327447a14696676e6ff052b54, type: 2}
 --- !u!4 &884074577

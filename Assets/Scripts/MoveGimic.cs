@@ -17,13 +17,15 @@ public class MoveGimic : MonoBehaviour
     public Vector3Int FallObjPos {get{return fallObjPos;} set{fallObjPos = value;}}
     private List<GameObject> oldObjs = new List<GameObject>();
     private List<GameObject> oldDownObjs = new List<GameObject>();
+    public List<Vector3Int> oldPickaxePos = new List<Vector3Int>();
+    public List<int> pickaxeGetCount = new List<int>();
     [SerializeField] GameObject wallPrefab;
+    [SerializeField] GameObject itemPrefab;
 
     // ブロック破壊処理
     public int destroyCount{get; set;}
     private GameObject wallobj;
     private GameObject oldwallobj;
-
     public List<GameObject> OldObjs {get{return oldObjs;}}
     public List<GameObject> OldDownObjs {get{return oldDownObjs;}}
 
@@ -270,8 +272,30 @@ public class MoveGimic : MonoBehaviour
         return true;
     }
 
+    public bool BackItem(int count)
+    {
+        if (pickaxeGetCount.Count == 0) {
+            return false;
+        }
+        if (count == pickaxeGetCount[pickaxeGetCount.Count-1]) {
+            // 見た目
+            GameObject itemObj = Instantiate(itemPrefab, oldPickaxePos[oldPickaxePos.Count-1], Quaternion.identity);
+            change.pickaxeObj.Add(itemObj.transform.GetChild(0));
+            change.pickaxeImage.Add(itemObj.transform.GetChild(1));
+            itemObj.transform.GetChild(1).gameObject.SetActive(false);
+            // タイル情報を格納
+            stage.moveObjPositionOnTile.Add(itemObj, oldPickaxePos[oldPickaxePos.Count-1]);
+            stage.tileAll[oldPickaxePos[oldPickaxePos.Count-1].x,oldPickaxePos[oldPickaxePos.Count-1].y,oldPickaxePos[oldPickaxePos.Count-1].z] = item;
+
+            pickaxeGetCount.RemoveAt(pickaxeGetCount.Count-1);
+            oldPickaxePos.RemoveAt(oldPickaxePos.Count-1);
+            return true;
+        }
+        return false;
+    }
+
     // PICKAXE
-    public bool GetItem(Vector3Int position)
+    public bool GetItem(Vector3Int position, int count)
     {
         if (ConfirmTileType(position, new StageManager.TILE_TYPE[]{item})) {
             // ITEMを消す
@@ -287,6 +311,8 @@ public class MoveGimic : MonoBehaviour
             stage.moveObjPositionOnTile.Remove(item);
             Sounds.instance.se[14].Play();
             Destroy(item);
+            oldPickaxePos.Add(position);
+            pickaxeGetCount.Add(count);
             return true;
         }
         return false;

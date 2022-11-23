@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
     private List<Vector3Int> oldPos = new List<Vector3Int>();
     private List<Vector3Int> nextPos = new List<Vector3Int>();
     private List<Vector3Int> nextBlockPos = new List<Vector3Int>();
-    private List<StageManager.TILE_TYPE> oldTileType = new List<StageManager.TILE_TYPE>();
+    public List<StageManager.TILE_TYPE> oldTileType = new List<StageManager.TILE_TYPE>();
     private List<StageManager.TILE_TYPE> oldDownTileType = new List<StageManager.TILE_TYPE>();
     private List<StageManager.TILE_TYPE> oldNextDownTileType = new List<StageManager.TILE_TYPE>();
     #endregion
@@ -132,8 +132,9 @@ public class GameManager : MonoBehaviour
             if (!func(new Vector3Int(nextPlayerPositionOnTile.x,i,nextPlayerPositionOnTile.z))) continue;
             
             // itemget
-            func = gimic.GetItem;
-            func(gimic.Pos + Vector3Int.up);
+            // func = gimic.GetItem;
+            gimic.GetItem(gimic.Pos + Vector3Int.up, oldPos.Count);
+            // func(gimic.Pos + Vector3Int.up);
 
             // ゴール
             func = gimic.Goal;
@@ -185,8 +186,8 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        func = gimic.GetItem;
-        func(nextPlayerPositionOnTile);
+        // func = gimic.GetItem;
+        gimic.GetItem(nextPlayerPositionOnTile, oldPos.Count);
 
         //移動先がブロックの場合(木箱)
         func = gimic.IsBlock;
@@ -300,7 +301,7 @@ public class GameManager : MonoBehaviour
             if (!gimic.BlockDownPos(nextBlockPositionOnTile - (new Vector3Int(0,i,0)))) continue;
 
             for (int j = nextBlockPositionOnTile.y; j >= (gimic.Pos + Vector3Int.up).y; j--) {
-                gimic.GetItem(new Vector3Int(nextBlockPositionOnTile.x,j,nextBlockPositionOnTile.z));
+                gimic.GetItem(new Vector3Int(nextBlockPositionOnTile.x,j,nextBlockPositionOnTile.z), oldPos.Count);
             }
 
             //巻き戻しリストにADD
@@ -432,23 +433,21 @@ public class GameManager : MonoBehaviour
                 renderer.sharedMaterial = materialTrans;
                 gimic.OldDownObjs.RemoveAt(gimic.OldDownObjs.Count-1);
             }
+            gimic.BackItem(oldPos.Count-1);
             
             gimic.OldObjs.RemoveAt(gimic.OldObjs.Count-1);
             nextBlockPos.RemoveAt(nextBlockPos.Count-1);
         }
-        // それ以外の場合
         else {
-
             // FALLOBJのBACK処理
             if (gimic.BackFallObj(oldDownTileType[oldDownTileType.Count-1], currentPlayerPositionOnTile)) {
                 MeshRenderer renderer = gimic.OldDownObjs[gimic.OldDownObjs.Count-1].GetComponentInChildren<MeshRenderer>();
                 Material materialTrans = new Material(opaqueMaterial);
                 renderer.sharedMaterial = materialTrans;
                 gimic.OldDownObjs.RemoveAt(gimic.OldDownObjs.Count-1);
+                stage.tileAll[nextPlayerPositionOnTile.x,nextPlayerPositionOnTile.y,nextPlayerPositionOnTile.z] = gimic.none;
             }
-
-            // NEXTにNONE
-            stage.tileAll[nextPlayerPositionOnTile.x,nextPlayerPositionOnTile.y,nextPlayerPositionOnTile.z] = gimic.none;
+            gimic.BackItem(oldPos.Count-1);
         }
 
         // BACKした現在の位置にPLAYERを入れる
