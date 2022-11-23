@@ -166,8 +166,8 @@ public class GameManager : MonoBehaviour
         }
 
         // wallを壊す
-        func = gimic.DestroyBlock;
-        if (func(nextPlayerPositionOnTile)) {
+        // func = gimic.DestroyBlock;
+        if (gimic.DestroyWall(nextPlayerPositionOnTile, oldPos.Count)) {
             nextPlayerPositionOnTile = currentPlayerPositionOnTile;
             return;
         }
@@ -420,34 +420,35 @@ public class GameManager : MonoBehaviour
             int plusY = nextPlayerPositionOnTile.y - nextBlockPos[nextBlockPos.Count-1].y;
 
             // BLOCKを移動
-            gimic.OldObjs[gimic.OldObjs.Count-1].transform.DOPath(new Vector3[]{gimic.OldObjs[gimic.OldObjs.Count-1].transform.position + new Vector3Int(0,plusY,0),nextPlayerPositionOnTile},0.5f,PathType.Linear);
+            gimic.oldObjs[gimic.oldObjs.Count-1].transform.DOPath(new Vector3[]{gimic.oldObjs[gimic.oldObjs.Count-1].transform.position + new Vector3Int(0,plusY,0),nextPlayerPositionOnTile},0.5f,PathType.Linear);
 
             // BLOCKのTILE情報を更新
-            stage.moveObjPositionOnTile[gimic.OldObjs[gimic.OldObjs.Count-1]] = nextPlayerPositionOnTile;
+            stage.moveObjPositionOnTile[gimic.oldObjs[gimic.oldObjs.Count-1]] = nextPlayerPositionOnTile;
             stage.tileAll[nextPlayerPositionOnTile.x,nextPlayerPositionOnTile.y,nextPlayerPositionOnTile.z] = gimic.block;
 
             // FALLOBJのBACK処理
             if (gimic.BackFallObj(oldDownTileType[oldDownTileType.Count-1], currentPlayerPositionOnTile)) {
-                MeshRenderer renderer = gimic.OldDownObjs[gimic.OldDownObjs.Count-1].GetComponentInChildren<MeshRenderer>();
+                MeshRenderer renderer = gimic.oldDownObjs[gimic.oldDownObjs.Count-1].GetComponentInChildren<MeshRenderer>();
                 Material materialTrans = new Material(opaqueMaterial);
                 renderer.sharedMaterial = materialTrans;
-                gimic.OldDownObjs.RemoveAt(gimic.OldDownObjs.Count-1);
+                gimic.oldDownObjs.RemoveAt(gimic.oldDownObjs.Count-1);
             }
             gimic.BackItem(oldPos.Count-1);
             
-            gimic.OldObjs.RemoveAt(gimic.OldObjs.Count-1);
+            gimic.oldObjs.RemoveAt(gimic.oldObjs.Count-1);
             nextBlockPos.RemoveAt(nextBlockPos.Count-1);
         }
         else {
             // FALLOBJのBACK処理
             if (gimic.BackFallObj(oldDownTileType[oldDownTileType.Count-1], currentPlayerPositionOnTile)) {
-                MeshRenderer renderer = gimic.OldDownObjs[gimic.OldDownObjs.Count-1].GetComponentInChildren<MeshRenderer>();
+                MeshRenderer renderer = gimic.oldDownObjs[gimic.oldDownObjs.Count-1].GetComponentInChildren<MeshRenderer>();
                 Material materialTrans = new Material(opaqueMaterial);
                 renderer.sharedMaterial = materialTrans;
-                gimic.OldDownObjs.RemoveAt(gimic.OldDownObjs.Count-1);
+                gimic.oldDownObjs.RemoveAt(gimic.oldDownObjs.Count-1);
                 stage.tileAll[nextPlayerPositionOnTile.x,nextPlayerPositionOnTile.y,nextPlayerPositionOnTile.z] = gimic.none;
             }
             gimic.BackItem(oldPos.Count-1);
+            gimic.BackDestroyWall(oldPos.Count-1);
         }
 
         // BACKした現在の位置にPLAYERを入れる

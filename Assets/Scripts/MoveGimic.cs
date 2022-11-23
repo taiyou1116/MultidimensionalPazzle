@@ -15,10 +15,16 @@ public class MoveGimic : MonoBehaviour
     private Vector3Int fallObjPos = new Vector3Int(100,100,100);
     public Vector3Int Pos {get{return pos;}}
     public Vector3Int FallObjPos {get{return fallObjPos;} set{fallObjPos = value;}}
-    private List<GameObject> oldObjs = new List<GameObject>();
-    private List<GameObject> oldDownObjs = new List<GameObject>();
+    public List<GameObject> oldObjs = new List<GameObject>();
+    public List<GameObject> oldDownObjs = new List<GameObject>();
     public List<Vector3Int> oldPickaxePos = new List<Vector3Int>();
-    public List<int> pickaxeGetCount = new List<int>();
+
+    // 壊した場所のVector3IntをListで持つ
+    public List<Vector3Int> oldWallPos = new List<Vector3Int>();
+    // itemを最初から何番目に取得したか
+    private List<int> itemCount = new List<int>();
+    // wallDestroyを最初から何番目にしたか
+    private List<int> destroyWallCount = new List<int>();
     [SerializeField] GameObject wallPrefab;
     [SerializeField] GameObject itemPrefab;
 
@@ -26,8 +32,6 @@ public class MoveGimic : MonoBehaviour
     public int destroyCount{get; set;}
     private GameObject wallobj;
     private GameObject oldwallobj;
-    public List<GameObject> OldObjs {get{return oldObjs;}}
-    public List<GameObject> OldDownObjs {get{return oldDownObjs;}}
 
     #region タイルタイプを簡略化
     public StageManager.TILE_TYPE wall {get{return StageManager.TILE_TYPE.WALL;}}
@@ -274,10 +278,10 @@ public class MoveGimic : MonoBehaviour
 
     public bool BackItem(int count)
     {
-        if (pickaxeGetCount.Count == 0) {
+        if (itemCount.Count == 0) {
             return false;
         }
-        if (count == pickaxeGetCount[pickaxeGetCount.Count-1]) {
+        if (count == itemCount[itemCount.Count-1]) {
             // 見た目
             GameObject itemObj = Instantiate(itemPrefab, oldPickaxePos[oldPickaxePos.Count-1], Quaternion.identity);
             change.pickaxeObj.Add(itemObj.transform.GetChild(0));
@@ -287,7 +291,10 @@ public class MoveGimic : MonoBehaviour
             stage.moveObjPositionOnTile.Add(itemObj, oldPickaxePos[oldPickaxePos.Count-1]);
             stage.tileAll[oldPickaxePos[oldPickaxePos.Count-1].x,oldPickaxePos[oldPickaxePos.Count-1].y,oldPickaxePos[oldPickaxePos.Count-1].z] = item;
 
-            pickaxeGetCount.RemoveAt(pickaxeGetCount.Count-1);
+            playerManager.pickaxeCount--;
+            mainUI.pickaxeText.text = playerManager.pickaxeCount.ToString();
+
+            itemCount.RemoveAt(itemCount.Count-1);
             oldPickaxePos.RemoveAt(oldPickaxePos.Count-1);
             return true;
         }
@@ -312,13 +319,38 @@ public class MoveGimic : MonoBehaviour
             Sounds.instance.se[14].Play();
             Destroy(item);
             oldPickaxePos.Add(position);
-            pickaxeGetCount.Add(count);
+            itemCount.Add(count);
             return true;
         }
         return false;
     }
 
-    public bool DestroyBlock(Vector3Int next)
+    // DestroyしたWallを戻す
+    public bool BackDestroyWall(int count)
+    {
+        if (destroyWallCount.Count == 0) {
+            return false;
+        }
+        if (count + 1 == destroyWallCount[destroyWallCount.Count-1]) {
+            // 見た目
+            GameObject wallObj = Instantiate(wallPrefab, oldWallPos[oldWallPos.Count-1], Quaternion.identity);
+            // タイル情報を格納
+            stage.moveObjPositionOnTile.Add(wallObj, oldWallPos[oldWallPos.Count-1]);
+            stage.tileAll[oldWallPos[oldWallPos.Count-1].x,oldWallPos[oldWallPos.Count-1].y,oldWallPos[oldWallPos.Count-1].z] = wall;
+
+            playerManager.pickaxeCount++;
+            playerManager.stoneCount--;
+            mainUI.pickaxeText.text = playerManager.pickaxeCount.ToString();
+            mainUI.stoneText.text = playerManager.stoneCount.ToString();
+
+            destroyWallCount.RemoveAt(destroyWallCount.Count-1);
+            oldWallPos.RemoveAt(oldWallPos.Count-1);
+            return true;
+        }
+        return false;
+    }
+
+    public bool DestroyWall(Vector3Int next, int count)
     {
         if (playerManager == null) {
             playerManager = stage.Player;
@@ -340,7 +372,7 @@ public class MoveGimic : MonoBehaviour
         if (stage.tileAll[next.x,next.y,next.z] == wall) {
             destroyCount++;
             wallobj = GetBlockObjAt(new Vector3Int(next.x,next.y,next.z));
-            
+            // 3回目からmissing
             switch (destroyCount)
             {
                 case 1:
@@ -352,13 +384,17 @@ public class MoveGimic : MonoBehaviour
                         oldwallobj.GetComponentInChildren<MeshRenderer>().material.DOColor(Color.white,0);
                         return false;
                     }
+                    // 本処理
                     stage.tileAll[next.x,next.y,next.z] = none;
+                    stage.moveObjPositionOnTile.Remove(wallobj);
                     Destroy(wallobj);
                     destroyCount = 0;
                     playerManager.pickaxeCount--;
                     playerManager.stoneCount++;
                     mainUI.pickaxeText.text = playerManager.pickaxeCount.ToString();
                     mainUI.stoneText.text = playerManager.stoneCount.ToString();
+                    oldWallPos.Add(next);
+                    destroyWallCount.Add(count);
                 break;
             }
             oldwallobj = wallobj;
