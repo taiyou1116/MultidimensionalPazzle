@@ -20,6 +20,10 @@ public class GameManager : MonoBehaviour
     private Vector3Int nextPlayerPositionOnTile;
     private Vector3Int nextPutPos3D;
     private Vector3Int nextPutPos2D;
+
+    //フォールオブジェを落とす処理
+    public Material transparentMaterial;
+    public Material opaqueMaterial;
     #region 巻き戻し処理リスト
     private List<int> oldHierarchy = new List<int>();
     private List<Vector3Int> oldPos = new List<Vector3Int>();
@@ -336,9 +340,6 @@ public class GameManager : MonoBehaviour
         gimic.ReadyFallObj(downPos);
     }
 
-    //フォールオブジェを落とす処理
-    public Material transparentMaterial;
-    public Material opaqueMaterial;
     private void FallObj()
     {
         //CURRENT + DOWN に FALLOBJ がなかったら RETURN
@@ -449,6 +450,7 @@ public class GameManager : MonoBehaviour
             }
             gimic.BackItem(oldPos.Count-1);
             gimic.BackDestroyWall(oldPos.Count-1);
+            gimic.BackPutWall(oldPos.Count-1);
         }
 
         // BACKした現在の位置にPLAYERを入れる
@@ -492,10 +494,10 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (changeStage.Stage2D) {
-                gimic.PutWall(nextPutPos2D);
+                gimic.PutWall(nextPutPos2D, oldPos.Count);
             }
             else {
-                gimic.PutWall(nextPutPos3D);
+                gimic.PutWall(nextPutPos3D, oldPos.Count);
             }
         }
 

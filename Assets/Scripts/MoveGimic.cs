@@ -18,13 +18,11 @@ public class MoveGimic : MonoBehaviour
     public List<GameObject> oldObjs = new List<GameObject>();
     public List<GameObject> oldDownObjs = new List<GameObject>();
     public List<Vector3Int> oldPickaxePos = new List<Vector3Int>();
-
-    // 壊した場所のVector3IntをListで持つ
     public List<Vector3Int> oldWallPos = new List<Vector3Int>();
-    // itemを最初から何番目に取得したか
+    public List<Vector3Int> oldPutWallPos = new List<Vector3Int>();
     private List<int> itemCount = new List<int>();
-    // wallDestroyを最初から何番目にしたか
     private List<int> destroyWallCount = new List<int>();
+    private List<int> putWallCount = new List<int>();
     [SerializeField] GameObject wallPrefab;
     [SerializeField] GameObject itemPrefab;
 
@@ -350,6 +348,27 @@ public class MoveGimic : MonoBehaviour
         return false;
     }
 
+    public bool BackPutWall(int count)
+    {
+        if (putWallCount.Count == 0) {
+            return false;
+        }
+        if (count + 1 == putWallCount[putWallCount.Count-1]) {
+            // 見た目
+            GameObject putwallObj = GetBlockObjAt(oldPutWallPos[oldPutWallPos.Count - 1]);
+            // タイル情報を格納
+            stage.tileAll[oldPutWallPos[oldPutWallPos.Count-1].x,oldPutWallPos[oldPutWallPos.Count-1].y,oldPutWallPos[oldPutWallPos.Count-1].z] = none;
+
+            playerManager.stoneCount++;
+            mainUI.stoneText.text = playerManager.stoneCount.ToString();
+            Destroy(putwallObj);
+            putWallCount.RemoveAt(putWallCount.Count-1);
+            oldPutWallPos.RemoveAt(oldPutWallPos.Count-1);
+            return true;
+        }
+        return false;
+    }
+
     public bool DestroyWall(Vector3Int next, int count)
     {
         if (playerManager == null) {
@@ -404,7 +423,7 @@ public class MoveGimic : MonoBehaviour
     }
     
     // wallObjを置く
-    public bool PutWall(Vector3Int position)
+    public bool PutWall(Vector3Int position, int count)
     {
         if (playerManager == null) {
             playerManager = stage.Player;
@@ -419,6 +438,9 @@ public class MoveGimic : MonoBehaviour
         // タイル情報を格納
         stage.moveObjPositionOnTile.Add(wallObj, position);
         stage.tileAll[position.x,position.y,position.z] = wall;
+
+        putWallCount.Add(count);
+        oldPutWallPos.Add(position);
         StartCoroutine(BlockTimer(smoke));
         return true;
     }
