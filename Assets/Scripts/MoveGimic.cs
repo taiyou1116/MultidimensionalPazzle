@@ -307,6 +307,7 @@ public class MoveGimic : MonoBehaviour
             if (playerManager == null) {
                 playerManager = stage.Player;
             }
+            playerManager.pickaxe.SetActive(true);
             playerManager.pickaxeCount++;
             mainUI.pickaxeText.text = playerManager.pickaxeCount.ToString();
             GameObject item = GetBlockObjAt(position);
@@ -382,9 +383,11 @@ public class MoveGimic : MonoBehaviour
             if (wallobj != null) {
                 wallobj.GetComponentInChildren<MeshRenderer>().material.DOColor(Color.white,0);
             }
+            playerManager.Anim.SetBool("dig", false);
             return false;
         } 
         if (playerManager.pickaxeCount == 0) {
+            playerManager.pickaxe.SetActive(false);
             destroyCount = 0;
             return false;
         }
@@ -396,11 +399,13 @@ public class MoveGimic : MonoBehaviour
             {
                 case 1:
                     wallobj.GetComponentInChildren<MeshRenderer>().material.DOColor(Color.red,0);
+                    playerManager.Anim.SetBool("dig", true);
                 break;
                 case 2:
                     if (wallobj != oldwallobj) {
                         destroyCount = 0;
                         oldwallobj.GetComponentInChildren<MeshRenderer>().material.DOColor(Color.white,0);
+                        playerManager.Anim.SetBool("dig", false);
                         return false;
                     }
                     // 本処理
@@ -419,6 +424,7 @@ public class MoveGimic : MonoBehaviour
             oldwallobj = wallobj;
             return true;
         }
+        playerManager.Anim.SetBool("dig", false);
         return false;
     }
     
@@ -477,7 +483,7 @@ public class MoveGimic : MonoBehaviour
 
     private IEnumerator BlockTimer(GameObject effect)
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         Destroy(effect);
     }
 }

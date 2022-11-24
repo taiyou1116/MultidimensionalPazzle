@@ -494,9 +494,14 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (changeStage.Stage2D) {
+                // 高さ上限を設ける
                 gimic.PutWall(nextPutPos2D, oldPos.Count);
             }
             else {
+                if (stage.tileAll[nextPutPos3D.x, nextPutPos3D.y, nextPutPos3D.z] != gimic.none) {
+                    Sounds.instance.se[10].Play();
+                    return;
+                }
                 gimic.PutWall(nextPutPos3D, oldPos.Count);
             }
         }

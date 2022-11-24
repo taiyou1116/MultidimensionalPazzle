@@ -9,6 +9,7 @@ public class PlayerManager : MonoBehaviour
     private float thinkingTime;
     public CinemachineVirtualCamera vc;
     public GameObject key;
+    public GameObject pickaxe;
     public int pickaxeCount{get; set;}
     public int stoneCount{get; set;}
 
