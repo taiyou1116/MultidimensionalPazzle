@@ -417,6 +417,7 @@ public class MoveGimic : MonoBehaviour
                     playerManager.stoneCount++;
                     mainUI.pickaxeText.text = playerManager.pickaxeCount.ToString();
                     mainUI.stoneText.text = playerManager.stoneCount.ToString();
+                    Sounds.instance.se[15].Play();
                     oldWallPos.Add(next);
                     destroyWallCount.Add(count);
                 break;
@@ -447,7 +448,8 @@ public class MoveGimic : MonoBehaviour
 
         putWallCount.Add(count);
         oldPutWallPos.Add(position);
-        StartCoroutine(BlockTimer(smoke));
+        Sounds.instance.se[3].Play();
+        StartCoroutine(DestroyTimer(smoke));
         return true;
     }
 
@@ -478,10 +480,10 @@ public class MoveGimic : MonoBehaviour
         GameObject effect = Instantiate(Sounds.instance.effects[0],pos + new Vector3(0,-0.5f,0),Quaternion.identity); 
         Sounds.instance.se[3].Play();
 
-        StartCoroutine(BlockTimer(effect));
+        StartCoroutine(DestroyTimer(effect));
     }
 
-    private IEnumerator BlockTimer(GameObject effect)
+    private IEnumerator DestroyTimer(GameObject effect)
     {
         yield return new WaitForSeconds(1f);
         Destroy(effect);
