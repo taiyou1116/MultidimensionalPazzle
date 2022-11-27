@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
     private List<Vector3Int> oldPos = new List<Vector3Int>();
     private List<Vector3Int> nextPos = new List<Vector3Int>();
     private List<Vector3Int> nextBlockPos = new List<Vector3Int>();
-    public List<StageManager.TILE_TYPE> oldTileType = new List<StageManager.TILE_TYPE>();
+    private List<StageManager.TILE_TYPE> oldTileType = new List<StageManager.TILE_TYPE>();
     private List<StageManager.TILE_TYPE> oldDownTileType = new List<StageManager.TILE_TYPE>();
     private List<StageManager.TILE_TYPE> oldNextDownTileType = new List<StageManager.TILE_TYPE>();
     #endregion
@@ -490,7 +490,8 @@ public class GameManager : MonoBehaviour
     {
         operation.PageUpdate();
         if (goal || operation.Operation) return;
-
+        
+        // PUTWALL
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (changeStage.Stage2D) {

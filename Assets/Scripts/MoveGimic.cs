@@ -17,9 +17,9 @@ public class MoveGimic : MonoBehaviour
     public Vector3Int FallObjPos {get{return fallObjPos;} set{fallObjPos = value;}}
     public List<GameObject> oldObjs = new List<GameObject>();
     public List<GameObject> oldDownObjs = new List<GameObject>();
-    public List<Vector3Int> oldPickaxePos = new List<Vector3Int>();
-    public List<Vector3Int> oldWallPos = new List<Vector3Int>();
-    public List<Vector3Int> oldPutWallPos = new List<Vector3Int>();
+    private List<Vector3Int> oldPickaxePos = new List<Vector3Int>();
+    private List<Vector3Int> oldWallPos = new List<Vector3Int>();
+    private List<Vector3Int> oldPutWallPos = new List<Vector3Int>();
     private List<int> itemCount = new List<int>();
     private List<int> destroyWallCount = new List<int>();
     private List<int> putWallCount = new List<int>();
@@ -27,7 +27,7 @@ public class MoveGimic : MonoBehaviour
     [SerializeField] GameObject itemPrefab;
 
     // ブロック破壊処理
-    public int destroyCount{get; set;}
+    private int destroyCount{get; set;}
     private GameObject wallobj;
     private GameObject oldwallobj;
 
@@ -387,7 +387,6 @@ public class MoveGimic : MonoBehaviour
             return false;
         } 
         if (playerManager.pickaxeCount == 0) {
-            playerManager.pickaxe.SetActive(false);
             destroyCount = 0;
             return false;
         }
@@ -420,6 +419,11 @@ public class MoveGimic : MonoBehaviour
                     Sounds.instance.se[15].Play();
                     oldWallPos.Add(next);
                     destroyWallCount.Add(count);
+                    playerManager.Anim.SetBool("dig", false);
+
+                    if (playerManager.pickaxeCount == 0) {
+                        playerManager.pickaxe.SetActive(false);
+                    }
                 break;
             }
             oldwallobj = wallobj;
