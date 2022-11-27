@@ -99,7 +99,9 @@ public class GameManager : MonoBehaviour
             return;
         }
         nextPutPos3D = GetNextPlayerPositionOnTile(nextPlayerPositionOnTile,direction);
+        nextPutPos2D = nextPutPos3D;
         
+        // NONEではない場合の処理(2D)
         for(int i = stage.MaxHierarchy-1; i >= 0; i--) {
             if (!gimic.CheckMaxPut(new Vector3Int(nextPutPos3D.x,i,nextPutPos3D.z))) continue;
 
@@ -135,10 +137,8 @@ public class GameManager : MonoBehaviour
             func = gimic.CheckMaxHigh;
             if (!func(new Vector3Int(nextPlayerPositionOnTile.x,i,nextPlayerPositionOnTile.z))) continue;
             
-            // itemget
-            // func = gimic.GetItem;
+            // PICKAXE
             gimic.GetItem(gimic.Pos + Vector3Int.up, oldPos.Count);
-            // func(gimic.Pos + Vector3Int.up);
 
             // ゴール
             func = gimic.Goal;
@@ -157,6 +157,7 @@ public class GameManager : MonoBehaviour
             stage.PlayerHierarchy = gimic.Pos.y + Vector3Int.up.y;
             return;
         }
+        Sounds.instance.se[10].Play();
     }
 
     //3次元処理
