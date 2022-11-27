@@ -451,11 +451,12 @@ public class GameManager : MonoBehaviour
             gimic.BackItem(oldPos.Count-1);
             gimic.BackDestroyWall(oldPos.Count-1);
             gimic.BackPutWall(oldPos.Count-1);
+            // Debug.Log()
         }
 
         // BACKした現在の位置にPLAYERを入れる
         stage.moveObjPositionOnTile[player.gameObject] = currentPlayerPositionOnTile;
-        stage.tileAll[oldPos[oldPos.Count-1].x,oldPos[oldPos.Count-1].y,oldPos[oldPos.Count-1].z] = gimic.player;
+        // stage.tileAll[oldPos[oldPos.Count-1].x,oldPos[oldPos.Count-1].y,oldPos[oldPos.Count-1].z] = gimic.player;
         
         // PLAYER処理
         player.Move(currentPlayerPositionOnTile);
@@ -499,6 +500,7 @@ public class GameManager : MonoBehaviour
                 gimic.PutWall(nextPutPos2D, oldPos.Count);
             }
             else {
+                Debug.Log(stage.tileAll[nextPutPos3D.x, nextPutPos3D.y, nextPutPos3D.z]);
                 if (stage.tileAll[nextPutPos3D.x, nextPutPos3D.y, nextPutPos3D.z] != gimic.none) {
                     Sounds.instance.se[10].Play();
                     return;
