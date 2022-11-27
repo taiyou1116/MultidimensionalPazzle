@@ -27,8 +27,8 @@ public class MoveGimic : MonoBehaviour
     [SerializeField] GameObject itemPrefab;
 
     // ブロック破壊処理
-    private int destroyCount{get; set;}
-    private GameObject wallobj;
+    public int destroyCount{get; set;}
+    public GameObject wallobj{get; private set;}
     private GameObject oldwallobj;
 
     #region タイルタイプを簡略化
@@ -351,9 +351,18 @@ public class MoveGimic : MonoBehaviour
 
     public bool BackPutWall(int count)
     {
+        if (wallobj != null) {
+                wallobj.GetComponentInChildren<MeshRenderer>().material.DOColor(Color.white,0);
+            }
+        if (playerManager.pickaxeCount == 0) {
+            playerManager.pickaxe.SetActive(false);
+        }
+        playerManager.Anim.SetBool("dig", false);
+
         if (putWallCount.Count == 0) {
             return false;
         }
+        
         if (count + 1 == putWallCount[putWallCount.Count-1]) {
             // 見た目
             GameObject putwallObj = GetBlockObjAt(oldPutWallPos[oldPutWallPos.Count - 1]);
