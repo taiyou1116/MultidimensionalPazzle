@@ -314,6 +314,7 @@ public class MoveGimic : MonoBehaviour
             change.pickaxes.Remove(item);
             change.pickaxeObj.Remove(item.transform.GetChild(0));
             change.pickaxeImage.Remove(item.transform.GetChild(1));
+            stage.tileAll[position.x,position.y,position.z] = none;
             stage.moveObjPositionOnTile.Remove(item);
             Sounds.instance.se[14].Play();
             Destroy(item);
@@ -371,6 +372,7 @@ public class MoveGimic : MonoBehaviour
 
             playerManager.stoneCount++;
             mainUI.stoneText.text = playerManager.stoneCount.ToString();
+            stage.moveObjPositionOnTile.Remove(putwallObj);
             Destroy(putwallObj);
             putWallCount.RemoveAt(putWallCount.Count-1);
             oldPutWallPos.RemoveAt(oldPutWallPos.Count-1);
