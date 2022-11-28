@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviour
     {
         UP,DOWN,LEFT,RIGHT
     }
+    private DIRECTION nextDire;
 
     void Start()
     {
@@ -84,30 +85,32 @@ public class GameManager : MonoBehaviour
         //これやらないとfallObjPosが上手く書き換わらない。バグる
         gimic.FallObjPos = currentPlayerPositionOnTile + Vector3Int.down;
 
+        nextDire = direction;
         //MOVE処理
         Action<DIRECTION> func = MoveInThreedImensions;
         if (!changeStage.Stage2D) {
             func(direction);
 
             // nextの次が範囲外ならreturn
-            if (nextPlayerPositionOnTile.x == 8 || nextPlayerPositionOnTile.x == 0 || nextPlayerPositionOnTile.z == 8 || nextPlayerPositionOnTile.z == 0) {
-                return;
-            }
-            nextPutPos = GetNextPlayerPositionOnTile(nextPlayerPositionOnTile,direction);
+            // if (nextPlayerPositionOnTile.x == 8 || nextPlayerPositionOnTile.x == 0 || nextPlayerPositionOnTile.z == 8 || nextPlayerPositionOnTile.z == 0) {
+            //     return;
+            // }
+            // nextPutPos = GetNextPlayerPositionOnTile(nextPlayerPositionOnTile,direction);
 
         } else {
             func = MoveInTwoImensions;
             func(direction);
 
-            nextPutPos = GetNextPlayerPositionOnTile(nextPlayerPositionOnTile,direction);
-            // NONEではない場合の処理(2D)
-            for(int i = stage.MaxHierarchy-1; i >= 0; i--) {
-                if (!gimic.CheckMaxPut(new Vector3Int(nextPutPos.x,i,nextPutPos.z))) continue;
+            // nextPutPos = GetNextPlayerPositionOnTile(nextPlayerPositionOnTile,direction);
+            // // NONEではない場合の処理(2D)
+            // for(int i = stage.MaxHierarchy-1; i >= 0; i--) {
+            //     if (!gimic.CheckMaxPut(new Vector3Int(nextPutPos.x,i,nextPutPos.z))) continue;
 
-                nextPutPos = new Vector3Int(nextPutPos.x,i + 1,nextPutPos.z);
-                return;
-            }
+            //     nextPutPos = new Vector3Int(nextPutPos.x,i + 1,nextPutPos.z);
+            //     return;
+            // }
         }
+        
     }
 
     //2次元処理
@@ -496,12 +499,22 @@ public class GameManager : MonoBehaviour
         // PUTWALL
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            if (nextPlayerPositionOnTile.x == 8 || nextPlayerPositionOnTile.x == 0 || nextPlayerPositionOnTile.z == 8 || nextPlayerPositionOnTile.z == 0) {
+                return;
+            }
             if (changeStage.Stage2D) {
-                // 高さ上限を設ける
+                nextPutPos = GetNextPlayerPositionOnTile(nextPlayerPositionOnTile,nextDire);
+                // NONEではない場合の処理(2D)
+                for(int i = stage.MaxHierarchy-1; i >= 0; i--) {
+                    if (!gimic.CheckMaxPut(new Vector3Int(nextPutPos.x,i,nextPutPos.z))) continue;
+                    nextPutPos = new Vector3Int(nextPutPos.x,i + 1,nextPutPos.z);
+                    gimic.PutWall(nextPutPos, oldPos.Count);
+                    return;
+                }
                 gimic.PutWall(nextPutPos, oldPos.Count);
             }
             else {
-                Debug.Log(stage.tileAll[nextPutPos.x, nextPutPos.y, nextPutPos.z]);
+                nextPutPos = GetNextPlayerPositionOnTile(nextPlayerPositionOnTile,nextDire);
                 if (stage.tileAll[nextPutPos.x, nextPutPos.y, nextPutPos.z] != gimic.none) {
                     Sounds.instance.se[10].Play();
                     return;
