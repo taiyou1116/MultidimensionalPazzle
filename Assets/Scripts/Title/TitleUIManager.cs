@@ -89,6 +89,9 @@ public class TitleUIManager : MonoBehaviour
         });
         showloginPanel.onClick.AddListener(() => {
             ShowPanel(loginPanel);
+            if (MainForOnline.Instance.playerName != "") {
+                StartCoroutine(MainForOnline.Instance.web.Login(MainForOnline.Instance.playerName,MainForOnline.Instance.playerPass));
+            }
         });
         pageButton[0].onClick.AddListener(() => {
             BackPage();

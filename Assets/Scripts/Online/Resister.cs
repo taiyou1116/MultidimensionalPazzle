@@ -25,6 +25,8 @@ public class Resister : MonoBehaviour
                 return;
             }
             StartCoroutine(MainForOnline.Instance.web.ResisterUser(usernameInput.text, passwordInput.text));
+            MainForOnline.Instance.playerName = usernameInput.text;
+            MainForOnline.Instance.playerPass = passwordInput.text;
         });
 
         loginButton.onClick.AddListener(() => {

@@ -11,9 +11,10 @@ public class Login : MonoBehaviour
 
     void Start()
     {
-
         loginButton.onClick.AddListener(() => {
             StartCoroutine(MainForOnline.Instance.web.Login(usernameInput.text,passwordInput.text));
+            MainForOnline.Instance.playerName = usernameInput.text;
+            MainForOnline.Instance.playerPass = passwordInput.text;
         });
 
         resisterButton.onClick.AddListener(() => {

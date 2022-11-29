@@ -11,6 +11,8 @@ public class MainForOnline : MonoBehaviour
     public Login login;
     public Resister resister;
     public GameObject onlinePanel;
+    public string playerName;
+    public string playerPass;
 
     // SCENEを超えても消えないSTAGEDATA
     public string stageData{get; set;}

@@ -499,11 +499,11 @@ public class GameManager : MonoBehaviour
         // PUTWALL
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (nextPlayerPositionOnTile.x == 8 || nextPlayerPositionOnTile.x == 0 || nextPlayerPositionOnTile.z == 8 || nextPlayerPositionOnTile.z == 0) {
-                return;
-            }
             if (changeStage.Stage2D) {
                 nextPutPos = GetNextPlayerPositionOnTile(nextPlayerPositionOnTile,nextDire);
+                if (nextPutPos.x == 9 || nextPutPos.x == -1 || nextPutPos.z == 9 || nextPutPos.z == -1) {
+                    return;
+                }
                 // NONEではない場合の処理(2D)
                 for(int i = stage.MaxHierarchy-1; i >= 0; i--) {
                     if (!gimic.CheckMaxPut(new Vector3Int(nextPutPos.x,i,nextPutPos.z))) continue;
@@ -515,10 +515,14 @@ public class GameManager : MonoBehaviour
             }
             else {
                 nextPutPos = GetNextPlayerPositionOnTile(nextPlayerPositionOnTile,nextDire);
+                if (nextPutPos.x == 9 || nextPutPos.x == -1 || nextPutPos.z == 9 || nextPutPos.z == -1) {
+                    return;
+                }
                 if (stage.tileAll[nextPutPos.x, nextPutPos.y, nextPutPos.z] != gimic.none) {
                     Sounds.instance.se[10].Play();
                     return;
                 }
+                
                 gimic.PutWall(nextPutPos, oldPos.Count);
             }
         }
