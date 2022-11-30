@@ -40,8 +40,8 @@ public class MoveGimic : MonoBehaviour
     public StageManager.TILE_TYPE trap {get{return StageManager.TILE_TYPE.TRAP;}}
     public StageManager.TILE_TYPE item {get{return StageManager.TILE_TYPE.ITEM;}}
     public StageManager.TILE_TYPE fall {get{return StageManager.TILE_TYPE.FALLOBJ;}}
+    public StageManager.TILE_TYPE dont {get{return StageManager.TILE_TYPE.DONTDESTROY;}}
     public StageManager.TILE_TYPE grass {get{return StageManager.TILE_TYPE.GRASS;}}
-    public StageManager.TILE_TYPE soil {get{return StageManager.TILE_TYPE.SOIL;}}
     #endregion
     
     void Start()
@@ -98,7 +98,7 @@ public class MoveGimic : MonoBehaviour
     // 障害物の場合TRUE
     public bool IsWall(Vector3Int position)
     {
-        if (ConfirmTileType(position, new StageManager.TILE_TYPE[]{wall, trap, grass, fall})) {
+        if (ConfirmTileType(position, new StageManager.TILE_TYPE[]{wall, trap, grass, fall, dont})) {
             Sounds.instance.se[10].Play();
             return true;
         }
@@ -122,7 +122,7 @@ public class MoveGimic : MonoBehaviour
         }
 
         // BLOCKのNEXT
-        if (ConfirmTileType(nextBlockPos, new StageManager.TILE_TYPE[]{block, wall, trap, fall})) {
+        if (ConfirmTileType(nextBlockPos, new StageManager.TILE_TYPE[]{block, wall, trap, fall, dont})) {
             Sounds.instance.se[10].Play();
             return true;
         }
@@ -157,10 +157,10 @@ public class MoveGimic : MonoBehaviour
     }
 
     // BLOCKを落とせる場合TRUE
-    public bool BlockDownPos(Vector3Int downPos)//ここboolにする
+    public bool BlockDownPos(Vector3Int downPos)
     {
         if (!InTheRange(downPos)) return false;
-        if (ConfirmTileType(downPos, new StageManager.TILE_TYPE[]{wall, block, trap, grass, fall})) {
+        if (ConfirmTileType(downPos, new StageManager.TILE_TYPE[]{wall, block, trap, grass, fall, dont})) {
             pos = downPos;
             return true;
         }
@@ -187,7 +187,7 @@ public class MoveGimic : MonoBehaviour
     // 一番高い場所を取得
     public bool CheckMaxHigh(Vector3Int upPos)
     {
-        if (ConfirmTileType(upPos, new StageManager.TILE_TYPE[]{wall, block, grass, fall})) {
+        if (ConfirmTileType(upPos, new StageManager.TILE_TYPE[]{wall, block, grass, fall, dont})) {
             pos = upPos;
             return true;
         }
@@ -196,7 +196,7 @@ public class MoveGimic : MonoBehaviour
 
     public bool CheckMaxPut(Vector3Int upPos)
     {
-        if (ConfirmTileType(upPos, new StageManager.TILE_TYPE[]{wall, block, grass, fall, trap})) {
+        if (ConfirmTileType(upPos, new StageManager.TILE_TYPE[]{wall, block, grass, fall, trap, dont})) {
             pos = upPos;
             return true;
         }

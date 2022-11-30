@@ -18,7 +18,7 @@ public class StageManager : MonoBehaviour
         TRAP,
         FALLOBJ,
         ITEM,
-        OTHER,
+        DONTDESTROY,
         GRASS,
         SOIL,
     }
