@@ -90,25 +90,9 @@ public class GameManager : MonoBehaviour
         Action<DIRECTION> func = MoveInThreedImensions;
         if (!changeStage.Stage2D) {
             func(direction);
-
-            // nextの次が範囲外ならreturn
-            // if (nextPlayerPositionOnTile.x == 8 || nextPlayerPositionOnTile.x == 0 || nextPlayerPositionOnTile.z == 8 || nextPlayerPositionOnTile.z == 0) {
-            //     return;
-            // }
-            // nextPutPos = GetNextPlayerPositionOnTile(nextPlayerPositionOnTile,direction);
-
         } else {
             func = MoveInTwoImensions;
             func(direction);
-
-            // nextPutPos = GetNextPlayerPositionOnTile(nextPlayerPositionOnTile,direction);
-            // // NONEではない場合の処理(2D)
-            // for(int i = stage.MaxHierarchy-1; i >= 0; i--) {
-            //     if (!gimic.CheckMaxPut(new Vector3Int(nextPutPos.x,i,nextPutPos.z))) continue;
-
-            //     nextPutPos = new Vector3Int(nextPutPos.x,i + 1,nextPutPos.z);
-            //     return;
-            // }
         }
         
     }
@@ -155,6 +139,7 @@ public class GameManager : MonoBehaviour
 
             //プレイヤー処理
             PlayerProcess(gimic.Pos + Vector3Int.up);
+            nextPlayerPositionOnTile = gimic.Pos + Vector3Int.up;
 
             //プレイヤーの高さを更新
             stage.PlayerHierarchy = gimic.Pos.y + Vector3Int.up.y;
@@ -522,7 +507,6 @@ public class GameManager : MonoBehaviour
                     Sounds.instance.se[10].Play();
                     return;
                 }
-                
                 gimic.PutWall(nextPutPos, oldPos.Count);
             }
         }
