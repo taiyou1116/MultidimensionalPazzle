@@ -207,6 +207,21 @@ public class PlayerEdit : MonoBehaviour
             itemCount = 5;
             SetItem(itemCount);
         }
+        if (Input.GetKeyDown(KeyCode.Alpha7))
+        {
+            itemCount = 6;
+            SetItem(itemCount);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha8))
+        {
+            itemCount = 7;
+            SetItem(itemCount);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            itemCount = 8;
+            SetItem(itemCount);
+        }
 
         // 配置削除
         if (Input.GetMouseButtonDown(0))
@@ -263,9 +278,11 @@ public class PlayerEdit : MonoBehaviour
     private void SetItem(int iCount)
     {
         foreach(var value in itemImage) {
-            value.transform.DOScale(1f,0.3f);
+            // value.transform.DOScale(1f,0.3f);
+            value.transform.DOLocalMoveX(10,0.3f);
         }
-        itemImage[iCount].transform.DOScale(1.3f,0.3f);
+        // itemImage[iCount].transform.DOScale(1.3f,0.3f);
+        itemImage[iCount].transform.DOLocalMoveX(-10,0.3f);
         sound.editAudios[3].Play();
     }
 
