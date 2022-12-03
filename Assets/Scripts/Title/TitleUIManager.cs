@@ -58,7 +58,7 @@ public class TitleUIManager : MonoBehaviour
     void Start()
     {
         Application.targetFrameRate = 60;
-        
+
         PanelsTrue();
         MainForOnline.Instance.Initialize();
         titlePanel.SetActive(true);

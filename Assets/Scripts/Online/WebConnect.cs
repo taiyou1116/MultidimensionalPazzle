@@ -11,6 +11,9 @@ public class WebConnect : MonoBehaviour
     private AudioManager audiom;
     private MainUI mainUI;
     private string playerID;
+    private string stageData;
+    private Image image;
+    private List<GameObject> bgList = new List<GameObject>();
 
     // Sceneをまなぐため
     public void Initialize()
@@ -110,6 +113,11 @@ public class WebConnect : MonoBehaviour
         form.AddField("stageName", stageName);
         form.AddField("data", data);
         form.AddField("playerID", playerID);
+
+        string path = Application.dataPath + "/savedata.png";
+        byte[] bytes = System.IO.File.ReadAllBytes(path);
+        
+        form.AddBinaryData("image", bytes);
         
         using (UnityWebRequest www = UnityWebRequest.Post("http://taiyouserver.php.xdomain.jp/SendData.php", form))
         {
@@ -125,8 +133,6 @@ public class WebConnect : MonoBehaviour
             }
         }
     }
-
-    private List<GameObject> bgList = new List<GameObject>();
 
     public IEnumerator ReadData(GameObject parent)
     {
@@ -168,16 +174,19 @@ public class WebConnect : MonoBehaviour
                     stageG.transform.localPosition = Vector3.zero;
                     stageG.transform.Find("Name").GetComponent<Text>().text = jsonArray[i].AsObject["stagename"];
                     stageG.transform.Find("ID").GetComponent<Text>().text = jsonArray[i].AsObject["stageID"];
-
                     stageG.GetComponent<SetStageFromData>().stageID = jsonArray[i].AsObject["stageID"];
+
+                    string bytes = jsonArray[i].AsObject["image"];
+                    Debug.Log(bytes);
+                    Debug.Log(bytes.Length);
+                    // Texture2D texture = new Texture2D(2,2);
+                    // texture.LoadImage(bytes);
                 }
                 }
                 
             }
         }
     }
-
-    string stageData;
     public IEnumerator SetStage(string stageID)
     {
         titleUI.connectWebPanel.SetActive(true);
