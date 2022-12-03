@@ -5,6 +5,8 @@ using UnityEngine.Networking;
 using SimpleJSON;
 using UnityEngine.UI;
 using System.IO;
+using System.Text;
+
 public class WebConnect : MonoBehaviour
 {
     private TitleUIManager titleUI;
@@ -24,6 +26,12 @@ public class WebConnect : MonoBehaviour
         }
         
         mainUI = MainForOnline.Instance.mainUI;
+        
+        Invoke("CaptureScreenshot",1f);
+    }
+    private void CaptureScreenshot()
+    {
+        ScreenCapture.CaptureScreenshot(Application.dataPath + "/savedata.PNG");
     }
 
     public IEnumerator Login(string username, string password)
@@ -115,9 +123,11 @@ public class WebConnect : MonoBehaviour
         form.AddField("playerID", playerID);
 
         string path = Application.dataPath + "/savedata.png";
-        byte[] bytes = System.IO.File.ReadAllBytes(path);
         
-        form.AddBinaryData("image", bytes);
+        byte[] bytes = System.IO.File.ReadAllBytes(path);
+        string encode = System.Convert.ToBase64String(bytes);
+        
+        form.AddField("image", encode);
         
         using (UnityWebRequest www = UnityWebRequest.Post("http://taiyouserver.php.xdomain.jp/SendData.php", form))
         {
@@ -130,6 +140,7 @@ public class WebConnect : MonoBehaviour
             }
             else {
                 mainUI.uploadedPanel.SetActive(true);
+                string result = www.downloadHandler.text;
             }
         }
     }
@@ -167,23 +178,23 @@ public class WebConnect : MonoBehaviour
                 bgList = new List<GameObject>();
                 if (jsonArray != null) {
                     for(int i = 0; i < jsonArray.Count; i++){
-                    GameObject stageG = Instantiate(Resources.Load("Prefabs/stages") as GameObject);
-                    bgList.Add(stageG);
-                    stageG.transform.SetParent(parent.transform);
-                    stageG.transform.localScale = Vector3.one;
-                    stageG.transform.localPosition = Vector3.zero;
-                    stageG.transform.Find("Name").GetComponent<Text>().text = jsonArray[i].AsObject["stagename"];
-                    stageG.transform.Find("ID").GetComponent<Text>().text = jsonArray[i].AsObject["stageID"];
-                    stageG.GetComponent<SetStageFromData>().stageID = jsonArray[i].AsObject["stageID"];
-
-                    string bytes = jsonArray[i].AsObject["image"];
-                    Debug.Log(bytes);
-                    Debug.Log(bytes.Length);
-                    // Texture2D texture = new Texture2D(2,2);
-                    // texture.LoadImage(bytes);
+                        GameObject stageG = Instantiate(Resources.Load("Prefabs/stages") as GameObject);
+                        bgList.Add(stageG);
+                        stageG.transform.SetParent(parent.transform);
+                        stageG.transform.localScale = Vector3.one;
+                        stageG.transform.localPosition = Vector3.zero;
+                        stageG.transform.Find("Name").GetComponent<Text>().text = jsonArray[i].AsObject["stagename"];
+                        stageG.transform.Find("ID").GetComponent<Text>().text = jsonArray[i].AsObject["stageID"];
+                        stageG.GetComponent<SetStageFromData>().stageID = jsonArray[i].AsObject["stageID"];
+                        
+                        byte[] bytes = System.Convert.FromBase64String(jsonArray[i].AsObject["image"]);
+                    
+                        Texture2D texture = new Texture2D(2,2);
+                        texture.LoadImage(bytes);
+                        Image image = stageG.transform.Find("Image").GetComponent<Image>();
+                        image.sprite = Sprite.Create(texture,new Rect(0,0,texture.width, texture.height), Vector2.zero);
+                    }
                 }
-                }
-                
             }
         }
     }

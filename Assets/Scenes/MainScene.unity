@@ -2899,7 +2899,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 1.7777777, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -6677,7 +6677,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b577ce3ecc51ebc4482e5947f67ecd40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainUI: {fileID: 1940628033}
 --- !u!4 &802622864
 Transform:
   m_ObjectHideFlags: 0
@@ -6899,7 +6898,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 1.7777777, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -7044,7 +7043,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 1.7777777, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -7579,10 +7578,10 @@ Camera:
   m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
-    y: 0.000074744225
-    width: 1
-    height: 0.9998505
+    x: 0.00007623434
+    y: 0
+    width: 0.99984753
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -11331,7 +11330,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 1.7777777, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -12871,7 +12870,7 @@ RectTransform:
   m_GameObject: {fileID: 1562220624}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.38697916, y: 0.38697916, z: 0.38697916}
+  m_LocalScale: {x: 0.3796296, y: 0.3796296, z: 0.3796296}
   m_Children:
   - {fileID: 687218621}
   - {fileID: 1176776398}
@@ -12897,7 +12896,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1919.9998, y: 1079.9999}
+  m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1562220626
 MonoBehaviour:
