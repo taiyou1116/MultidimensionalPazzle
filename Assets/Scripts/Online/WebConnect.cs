@@ -31,7 +31,7 @@ public class WebConnect : MonoBehaviour
     }
     private void CaptureScreenshot()
     {
-        ScreenCapture.CaptureScreenshot(Application.dataPath + "/savedata.PNG");
+        ScreenCapture.CaptureScreenshot(Application.dataPath + "/savedata.PNG",1);
     }
 
     public IEnumerator Login(string username, string password)
@@ -152,7 +152,57 @@ public class WebConnect : MonoBehaviour
 
         WWWForm form = new WWWForm();
         
-        form.AddField("playerID", playerID);
+        using (UnityWebRequest www = UnityWebRequest.Post("http://taiyouserver.php.xdomain.jp/ReadData.php", form))
+        {
+            yield return www.SendWebRequest();
+
+            titleUI.connectWebPanel.SetActive(false);
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                titleUI.errorPanel.SetActive(true);
+                titleUI.errorPanels[0].SetActive(true);
+            }
+            else
+            {
+                string json = www.downloadHandler.text;
+
+                JSONArray jsonArray = JSON.Parse(json) as JSONArray;
+
+                // 初期化
+                foreach (var value in bgList) {
+                    Destroy(value);
+                }
+                bgList = new List<GameObject>();
+                if (jsonArray != null) {
+                    for(int i = 0; i < jsonArray.Count; i++){
+                        GameObject stageG = Instantiate(Resources.Load("Prefabs/stages") as GameObject);
+                        bgList.Add(stageG);
+                        stageG.transform.SetParent(parent.transform);
+                        stageG.transform.localScale = Vector3.one;
+                        stageG.transform.localPosition = Vector3.zero;
+                        stageG.transform.Find("Name").GetComponent<Text>().text = jsonArray[i].AsObject["stagename"];
+                        stageG.transform.Find("player").GetComponent<Text>().text = jsonArray[i].AsObject["name"];
+                        stageG.GetComponent<SetStageFromData>().stageID = jsonArray[i].AsObject["stageID"];
+                        
+                        byte[] bytes = System.Convert.FromBase64String(jsonArray[i].AsObject["image"]);
+                    
+                        Texture2D texture = new Texture2D(2,2);
+                        texture.LoadImage(bytes);
+                        Image image = stageG.transform.Find("Image").GetComponent<Image>();
+                        image.sprite = Sprite.Create(texture,new Rect(0,0,texture.width, texture.height), Vector2.zero);
+                    }
+                }
+            }
+        }
+    }
+
+    public IEnumerator ReadMyStage(GameObject parent)
+    {
+        titleUI.connectWebPanel.SetActive(true);
+        audiom.sounds[1].Play();
+
+        WWWForm form = new WWWForm();
         
         using (UnityWebRequest www = UnityWebRequest.Post("http://taiyouserver.php.xdomain.jp/ReadData.php", form))
         {
@@ -184,7 +234,7 @@ public class WebConnect : MonoBehaviour
                         stageG.transform.localScale = Vector3.one;
                         stageG.transform.localPosition = Vector3.zero;
                         stageG.transform.Find("Name").GetComponent<Text>().text = jsonArray[i].AsObject["stagename"];
-                        stageG.transform.Find("ID").GetComponent<Text>().text = jsonArray[i].AsObject["stageID"];
+                        stageG.transform.Find("player").GetComponent<Text>().text = jsonArray[i].AsObject["name"];
                         stageG.GetComponent<SetStageFromData>().stageID = jsonArray[i].AsObject["stageID"];
                         
                         byte[] bytes = System.Convert.FromBase64String(jsonArray[i].AsObject["image"]);

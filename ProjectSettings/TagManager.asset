@@ -12,6 +12,8 @@ TagManager:
   - trap
   - goal
   - pickaxe
+  - dont
+  - glass
   layers:
   - Default
   - TransparentFX
