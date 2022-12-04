@@ -23,20 +23,9 @@ public class StageManager : MonoBehaviour
         SOIL,
     }
     public TILE_TYPE[,,] tileAll;
-    private int playerHierarchy;
-    private int maxHierarchy;
-    public int PlayerHierarchy {
-        get {return playerHierarchy;}
-        set {playerHierarchy = value;}
-    }
-    public int MaxHierarchy {
-        get {return maxHierarchy;}
-    }
-    
-    private PlayerManager player;
-    public PlayerManager Player {
-        get {return player;}
-    }
+    public int playerHierarchy{get; set;}
+    public int maxHierarchy{get; set;}
+    public PlayerManager player{get; set;}
     public GameObject fireWork;
     public GameObject key;
     public int stageNumber;
@@ -50,24 +39,37 @@ public class StageManager : MonoBehaviour
     private string[] high;
     public void LoadStageData()
     {
-        // DEFAULTMODE
-        if (SelectMode() == "DEFAULT") {
-            stageNumber = PlayerPrefs.GetInt("STAGENUMBER", 0);
-            mainUI.ShowStageNumber(stageNumber);
-            high = stageFiles[stageNumber].text.Split(new[] {'.'},System.StringSplitOptions.RemoveEmptyEntries);
-        } 
-        // EDITMODE
-        if (SelectMode() == "EDIT") {
-            string path = Application.dataPath + "/test.txt";
-            string a = File.ReadAllText(path);
-            high = a.Split(new[] {'.'},System.StringSplitOptions.RemoveEmptyEntries);
+        switch (SelectMode()) {
+            case "DEFAULT":
+                stageNumber = PlayerPrefs.GetInt("STAGENUMBER", 0);
+                mainUI.ShowStageNumber(stageNumber);
+                high = stageFiles[stageNumber].text.Split(new[] {'.'},System.StringSplitOptions.RemoveEmptyEntries);
+            break;
+            case "EDIT":
+            case "ONLINE":
+                string path = Application.dataPath + "/test.txt";
+                string a = File.ReadAllText(path);
+                high = a.Split(new[] {'.'},System.StringSplitOptions.RemoveEmptyEntries);
+            break;
         }
-        // ONLINEMODE
-        if (SelectMode() == "ONLINE") {
-            string path = Application.dataPath + "/test.txt";
-            string a = File.ReadAllText(path);
-            high = a.Split(new[] {'.'},System.StringSplitOptions.RemoveEmptyEntries);
-        }
+        // // DEFAULTMODE
+        // if (SelectMode() == "DEFAULT") {
+        //     stageNumber = PlayerPrefs.GetInt("STAGENUMBER", 0);
+        //     mainUI.ShowStageNumber(stageNumber);
+        //     high = stageFiles[stageNumber].text.Split(new[] {'.'},System.StringSplitOptions.RemoveEmptyEntries);
+        // } 
+        // // EDITMODE
+        // if (SelectMode() == "EDIT") {
+        //     string path = Application.dataPath + "/test.txt";
+        //     string a = File.ReadAllText(path);
+        //     high = a.Split(new[] {'.'},System.StringSplitOptions.RemoveEmptyEntries);
+        // }
+        // // ONLINEMODE
+        // if (SelectMode() == "ONLINE") {
+        //     string path = Application.dataPath + "/test.txt";
+        //     string a = File.ReadAllText(path);
+        //     high = a.Split(new[] {'.'},System.StringSplitOptions.RemoveEmptyEntries);
+        // }
 
         // TEXTFILEの情報を読み込む
         string[] lines = high[0].Split(new[] {'\n','\r'},System.StringSplitOptions.RemoveEmptyEntries);
@@ -115,7 +117,7 @@ public class StageManager : MonoBehaviour
                         {
                             player = obj.GetComponent<PlayerManager>();
                             moveObjPositionOnTile.Add(obj,position);
-                            PlayerHierarchy = y;
+                            playerHierarchy = y;
                         }
                         if (tileType == TILE_TYPE.BLOCK || tileType == TILE_TYPE.FALLOBJ || tileType == TILE_TYPE.ITEM || tileType == TILE_TYPE.WALL)
                         {

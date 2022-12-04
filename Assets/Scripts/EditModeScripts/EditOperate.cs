@@ -23,17 +23,19 @@ public class EditOperate : MonoBehaviour
         }
         if (!stage2D)
         {
-            if (cameraNumber == 0) {
-                camera2D.transform.eulerAngles = new Vector3(90,0,0);
-            }
-            if (cameraNumber == 1) {
-                camera2D.transform.eulerAngles = new Vector3(90,-90,0);
-            }
-            if (cameraNumber == 2) {
-                camera2D.transform.eulerAngles = new Vector3(90,180,0);
-            }
-            if (cameraNumber == 3) {
-                camera2D.transform.eulerAngles = new Vector3(90,90,0);
+            switch (cameraNumber) {
+                case 0:
+                    camera2D.transform.eulerAngles = new Vector3(90,0,0);
+                break;
+                case 1:
+                    camera2D.transform.eulerAngles = new Vector3(90,-90,0);
+                break;
+                case 2:
+                    camera2D.transform.eulerAngles = new Vector3(90,180,0);
+                break;
+                case 3:
+                    camera2D.transform.eulerAngles = new Vector3(90,90,0);
+                break;
             }
             camera2D.depth = 1;
             stage2D = true;

@@ -278,10 +278,8 @@ public class PlayerEdit : MonoBehaviour
     private void SetItem(int iCount)
     {
         foreach(var value in itemImage) {
-            // value.transform.DOScale(1f,0.3f);
             value.transform.DOLocalMoveX(10,0.3f);
         }
-        // itemImage[iCount].transform.DOScale(1.3f,0.3f);
         itemImage[iCount].transform.DOLocalMoveX(-10,0.3f);
         sound.editAudios[3].Play();
     }
@@ -298,36 +296,42 @@ public class PlayerEdit : MonoBehaviour
                 for (int row = 0; row < 9; row++)
                 {
                     GameObject obj = GetBlockObjAt(new Vector3Int(row, high, culm));
-                    if (obj == null)
-                    {
+                    
+                    if (obj == null) {
                         rows += "2";
                         continue;
                     }
-                    if (obj.CompareTag("box"))
-                    {
-                        rows += "1";
-                    }
-                    if (obj.CompareTag("cube"))
-                    {
-                        rows += "0";
-                    }
-                    if (obj.CompareTag("playerObj"))
-                    {
-                        playerCount++;
-                        rows += "3";
-                    }
-                    if (obj.CompareTag("trap"))
-                    {
-                        rows += "5";
-                    }
-                    if (obj.CompareTag("fall"))
-                    {
-                        rows += "6";
-                    }
-                    if (obj.CompareTag("goal"))
-                    {
-                        goalCount++;
-                        rows += "4";
+
+                    switch (obj.tag) {
+                        case "box":
+                            rows += "1";
+                        break;
+                        case "cube":
+                            rows += "0";
+                        break;
+                        case "playerObj":
+                            rows += "3";
+                            playerCount++;
+                        break;
+                        case "trap":
+                            rows += "5";
+                        break;
+                        case "fall":
+                            rows += "6";
+                        break;
+                        case "goal":
+                            rows += "4";
+                            goalCount++;
+                        break;
+                        case "pickaxe":
+                            rows += "7";
+                        break;
+                        case "dont":
+                                rows += "8";
+                        break;
+                        case "glass":
+                            rows += "9";
+                        break;
                     }
                 }
             }

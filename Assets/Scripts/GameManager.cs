@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
         stage = gimic.stage;
         stage.LoadStageData();
         stage.CreateStage();
-        player = stage.Player;
+        player = stage.player;
         changeStage = stage.changeStage;
         mainUI = stage.mainUI;
         changeStage.GetObj();
@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour
         gimic.ResetPosData();
 
         //NEXTPOSITIONび移動できるか判別
-        for(int i = stage.MaxHierarchy-1; i >= 0; i--)
+        for(int i = stage.maxHierarchy-1; i >= 0; i--)
         {
             // 範囲外
             Func<Vector3Int, bool> func = gimic.None;
@@ -125,24 +125,24 @@ public class GameManager : MonoBehaviour
             if (!func(new Vector3Int(nextPlayerPositionOnTile.x,i,nextPlayerPositionOnTile.z))) continue;
             
             // PICKAXE
-            gimic.GetItem(gimic.Pos + Vector3Int.up, oldPos.Count);
+            gimic.GetItem(gimic.pos + Vector3Int.up, oldPos.Count);
 
             // ゴール
             func = gimic.Goal;
-            if (func(gimic.Pos + Vector3Int.up)) Goal();
+            if (func(gimic.pos + Vector3Int.up)) Goal();
 
             //巻き戻しリストにADD
-            AddListsAll(gimic.Pos + Vector3Int.up, currentPlayerPositionOnTile + Vector3Int.down);
+            AddListsAll(gimic.pos + Vector3Int.up, currentPlayerPositionOnTile + Vector3Int.down);
 
             //FALLOBJの処理
-            FallProcess(gimic.Pos);
+            FallProcess(gimic.pos);
 
             //プレイヤー処理
-            PlayerProcess(gimic.Pos + Vector3Int.up);
-            nextPlayerPositionOnTile = gimic.Pos + Vector3Int.up;
+            PlayerProcess(gimic.pos + Vector3Int.up);
+            nextPlayerPositionOnTile = gimic.pos + Vector3Int.up;
 
             //プレイヤーの高さを更新
-            stage.PlayerHierarchy = gimic.Pos.y + Vector3Int.up.y;
+            stage.playerHierarchy = gimic.pos.y + Vector3Int.up.y;
             return;
         }
         Sounds.instance.se[10].Play();
@@ -286,14 +286,14 @@ public class GameManager : MonoBehaviour
     // BLOCKを落とす処理
     private void BlockFallDown(Vector3Int nextBlockPositionOnTile)
     {
-        int confirmCount = stage.PlayerHierarchy + 1;
+        int confirmCount = stage.playerHierarchy + 1;
 
         for (int i = 0; i < confirmCount; i++)
         {
             // BLOCKが落とせるか判別
             if (!gimic.BlockDownPos(nextBlockPositionOnTile - (new Vector3Int(0,i,0)))) continue;
 
-            for (int j = nextBlockPositionOnTile.y; j >= (gimic.Pos + Vector3Int.up).y; j--) {
+            for (int j = nextBlockPositionOnTile.y; j >= (gimic.pos + Vector3Int.up).y; j--) {
                 gimic.GetItem(new Vector3Int(nextBlockPositionOnTile.x,j,nextBlockPositionOnTile.z), oldPos.Count);
             }
 
@@ -301,13 +301,13 @@ public class GameManager : MonoBehaviour
             AddListsAll(nextPlayerPositionOnTile, currentPlayerPositionOnTile + Vector3Int.down);
 
             //ブロックの巻き戻しリストにADD
-            nextBlockPos.Add(gimic.Pos + Vector3Int.up);
+            nextBlockPos.Add(gimic.pos + Vector3Int.up);
 
             //FALLOBJの処理
             FallProcess(nextPlayerPositionOnTile + Vector3Int.down);
 
             // BLOCKを落とす
-            gimic.BlockDown(nextPlayerPositionOnTile,nextBlockPositionOnTile,gimic.Pos + Vector3Int.up);
+            gimic.BlockDown(nextPlayerPositionOnTile,nextBlockPositionOnTile,gimic.pos + Vector3Int.up);
 
             // PLAYERを更新
             PlayerProcess(nextPlayerPositionOnTile);
@@ -378,7 +378,7 @@ public class GameManager : MonoBehaviour
     // BACK処理に必要なLISTに格納
     private void AddList(Vector3Int next)
     {
-        oldHierarchy.Add(stage.PlayerHierarchy);
+        oldHierarchy.Add(stage.playerHierarchy);
         oldPos.Add(currentPlayerPositionOnTile);
         nextPos.Add(next);
         oldTileType.Add(gimic.GetTileType(next));
@@ -451,7 +451,7 @@ public class GameManager : MonoBehaviour
         player.Move(currentPlayerPositionOnTile);
 
         // LIsTの一括削除
-        stage.PlayerHierarchy = oldHierarchy[oldHierarchy.Count-1];
+        stage.playerHierarchy = oldHierarchy[oldHierarchy.Count-1];
         gimic.RemoveList(new List<Vector3Int>[]{oldPos, nextPos}, new List<StageManager.TILE_TYPE>[]{oldTileType, oldDownTileType, oldNextDownTileType});
         oldHierarchy.RemoveAt(oldHierarchy.Count-1);
 
@@ -490,7 +490,7 @@ public class GameManager : MonoBehaviour
                     return;
                 }
                 // NONEではない場合の処理(2D)
-                for(int i = stage.MaxHierarchy-1; i >= 0; i--) {
+                for(int i = stage.maxHierarchy-1; i >= 0; i--) {
                     if (!gimic.CheckMaxPut(new Vector3Int(nextPutPos.x,i,nextPutPos.z))) continue;
                     nextPutPos = new Vector3Int(nextPutPos.x,i + 1,nextPutPos.z);
                     gimic.PutWall(nextPutPos, oldPos.Count);
@@ -701,7 +701,7 @@ public class GameManager : MonoBehaviour
         stage.LoadStageData();
         stage.CreateStage();
         mainUI.StageTextAnim(stage.stageNumber);
-        player = stage.Player;
+        player = stage.player;
         return true;
     }
     public void ChangeScene(string name)

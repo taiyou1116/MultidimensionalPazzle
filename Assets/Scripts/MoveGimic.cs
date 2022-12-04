@@ -11,9 +11,8 @@ public class MoveGimic : MonoBehaviour
     private MainUI mainUI;
     public GameObject fallOBj{get; set;}
     public bool isRiding{get; set;}
-    private Vector3Int pos;
+    public Vector3Int pos{get; private set;}
     private Vector3Int fallObjPos = new Vector3Int(100,100,100);
-    public Vector3Int Pos {get{return pos;}}
     public Vector3Int FallObjPos {get{return fallObjPos;} set{fallObjPos = value;}}
     public List<GameObject> oldObjs = new List<GameObject>();
     public List<GameObject> oldDownObjs = new List<GameObject>();
@@ -305,7 +304,7 @@ public class MoveGimic : MonoBehaviour
         if (ConfirmTileType(position, new StageManager.TILE_TYPE[]{item})) {
             // ITEMを消す
             if (playerManager == null) {
-                playerManager = stage.Player;
+                playerManager = stage.player;
             }
             playerManager.pickaxe.SetActive(true);
             playerManager.pickaxeCount++;
@@ -384,7 +383,7 @@ public class MoveGimic : MonoBehaviour
     public bool DestroyWall(Vector3Int next, int count)
     {
         if (playerManager == null) {
-            playerManager = stage.Player;
+            playerManager = stage.player;
         }
         if (ConfirmTileType(next + Vector3Int.up, new StageManager.TILE_TYPE[]{block})) {
             return false;
@@ -448,7 +447,7 @@ public class MoveGimic : MonoBehaviour
     public bool PutWall(Vector3Int position, int count)
     {
         if (playerManager == null) {
-            playerManager = stage.Player;
+            playerManager = stage.player;
         }
         if (playerManager.stoneCount == 0) return false;
 
