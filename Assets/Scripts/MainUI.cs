@@ -23,6 +23,7 @@ public class MainUI : MonoBehaviour
     public GameObject errorPanel;
     public GameObject loadPanel;
     public GameObject uploadedPanel;
+    public GameObject updatePanel;
 
     [Header("BUTTON")]
     public Button[] editButton;
@@ -39,7 +40,6 @@ public class MainUI : MonoBehaviour
     void Start()
     {
         goalPanel.SetActive(false);
-        // LoadLanguageData();
 
         editButton[0].onClick.AddListener(() => {
             BackEditScene();
@@ -52,6 +52,9 @@ public class MainUI : MonoBehaviour
         });
         editButton[3].onClick.AddListener(() => {
             FadeManager.Instance.LoadScene("TitleScene", 1);
+        });
+        editButton[4].onClick.AddListener(() => {
+            UpdateStage();
         });
     }
 
@@ -130,5 +133,11 @@ public class MainUI : MonoBehaviour
     {
         string name = stageName.text;
         StartCoroutine(MainForOnline.Instance.web.SendData(name, MainForOnline.Instance.stageData));
+    }
+
+    // 再編集
+    private void UpdateStage()
+    {
+        StartCoroutine(MainForOnline.Instance.web.ReSendData(MainForOnline.Instance.stageData));
     }
 }

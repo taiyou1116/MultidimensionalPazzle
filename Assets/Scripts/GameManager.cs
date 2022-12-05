@@ -235,15 +235,20 @@ public class GameManager : MonoBehaviour
         stage.key.SetActive(false);
         player.Anim.SetBool("Goal", gimic.Goal(nextPlayerPositionOnTile));
 
-        if (SelectMode() == "EDIT") {
-            EditGoal();
-            return;
+        switch (SelectMode()) {
+            case "EDIT":
+                EditGoal();
+            break;
+            case "REEDIT":
+                ReEditGoal();
+            break;
+            case "ONLINE":
+                OnlineGoal();
+            break;
+            default:
+                StoryGoal();
+            break;
         }
-        if (SelectMode() == "ONLINE") {
-            OnlineGoal();
-            return;
-        }
-        StoryGoal();
     }
 
     // ストーリーモードのゴール処理
@@ -262,6 +267,11 @@ public class GameManager : MonoBehaviour
     {
         stage.fireWork.SetActive(true);
         mainUI.editClearPanel.SetActive(true);
+    }
+    private void ReEditGoal()
+    {
+        stage.fireWork.SetActive(true);
+        mainUI.updatePanel.SetActive(true);
     }
 
     // ONLINEモードのゴール処理
@@ -397,7 +407,7 @@ public class GameManager : MonoBehaviour
         currentPlayerPositionOnTile = oldPos[oldPos.Count-1];
         // 次の位置を一個前の状態に更新
         nextPlayerPositionOnTile = nextPos[nextPos.Count-1];
-        //  ???
+        //  
         gimic.FallObjPos = currentPlayerPositionOnTile + Vector3Int.down;
         
         // ひとつ前のNEXTがBLOCKの場合
@@ -440,12 +450,10 @@ public class GameManager : MonoBehaviour
             gimic.BackItem(oldPos.Count-1);
             gimic.BackDestroyWall(oldPos.Count-1);
             gimic.BackPutWall(oldPos.Count-1);
-            // Debug.Log()
         }
 
         // BACKした現在の位置にPLAYERを入れる
         stage.moveObjPositionOnTile[player.gameObject] = currentPlayerPositionOnTile;
-        // stage.tileAll[oldPos[oldPos.Count-1].x,oldPos[oldPos.Count-1].y,oldPos[oldPos.Count-1].z] = gimic.player;
         
         // PLAYER処理
         player.Move(currentPlayerPositionOnTile);

@@ -269,7 +269,9 @@ public class PlayerEdit : MonoBehaviour
                 return;
             } 
             ReadInStageData(data);
-            PlayerPrefs.SetString("MODE", "EDIT");
+            if (PlayerPrefs.GetString("MODE") != "REEDIT") {
+                PlayerPrefs.SetString("MODE", "EDIT");
+            }
             MainForOnline.Instance.stageData = data;
             FadeManager.Instance.LoadScene("MainScene",1);
         }

@@ -47,29 +47,12 @@ public class StageManager : MonoBehaviour
             break;
             case "EDIT":
             case "ONLINE":
+            case "REEDIT":
                 string path = Application.dataPath + "/test.txt";
                 string a = File.ReadAllText(path);
                 high = a.Split(new[] {'.'},System.StringSplitOptions.RemoveEmptyEntries);
             break;
         }
-        // // DEFAULTMODE
-        // if (SelectMode() == "DEFAULT") {
-        //     stageNumber = PlayerPrefs.GetInt("STAGENUMBER", 0);
-        //     mainUI.ShowStageNumber(stageNumber);
-        //     high = stageFiles[stageNumber].text.Split(new[] {'.'},System.StringSplitOptions.RemoveEmptyEntries);
-        // } 
-        // // EDITMODE
-        // if (SelectMode() == "EDIT") {
-        //     string path = Application.dataPath + "/test.txt";
-        //     string a = File.ReadAllText(path);
-        //     high = a.Split(new[] {'.'},System.StringSplitOptions.RemoveEmptyEntries);
-        // }
-        // // ONLINEMODE
-        // if (SelectMode() == "ONLINE") {
-        //     string path = Application.dataPath + "/test.txt";
-        //     string a = File.ReadAllText(path);
-        //     high = a.Split(new[] {'.'},System.StringSplitOptions.RemoveEmptyEntries);
-        // }
 
         // TEXTFILEの情報を読み込む
         string[] lines = high[0].Split(new[] {'\n','\r'},System.StringSplitOptions.RemoveEmptyEntries);

@@ -14,7 +14,6 @@ public class WebConnect : MonoBehaviour
     private string playerID;
     private int playStageID;
     private string stageData;
-    private Image image;
     private List<GameObject> bgList = new List<GameObject>();
 
     // Sceneをまなぐため
@@ -149,6 +148,39 @@ public class WebConnect : MonoBehaviour
         }
     }
 
+    public IEnumerator ReSendData(string data)
+    {
+        mainUI.loadPanel.SetActive(true);
+        Sounds.instance.se[0].Play();
+
+        WWWForm form = new WWWForm();
+        
+        form.AddField("data", data);
+        form.AddField("stageID", playStageID);
+
+        string path = Application.dataPath + "/savedata.png";
+        
+        byte[] bytes = System.IO.File.ReadAllBytes(path);
+        string encode = System.Convert.ToBase64String(bytes);
+        
+        form.AddField("image", encode);
+        
+        using (UnityWebRequest www = UnityWebRequest.Post("http://taiyouserver.php.xdomain.jp/ReSendData.php", form))
+        {
+            yield return www.SendWebRequest();
+
+            mainUI.loadPanel.SetActive(false);
+
+            if (www.result != UnityWebRequest.Result.Success) {
+                mainUI.errorPanel.SetActive(true);
+            }
+            else {
+                Debug.Log(www.downloadHandler.text);
+                mainUI.uploadedPanel.SetActive(true);
+            }
+        }
+    }
+
     public IEnumerator ReadData(GameObject parent)
     {
         titleUI.connectWebPanel.SetActive(true);
@@ -196,6 +228,7 @@ public class WebConnect : MonoBehaviour
                         texture.LoadImage(bytes);
                         Image image = stageG.transform.Find("Image").GetComponent<Image>();
                         image.sprite = Sprite.Create(texture,new Rect(0,0,texture.width, texture.height), Vector2.zero);
+                        PlayerPrefs.SetString("MODE", "ONLINE");
                     }
                 }
             }
@@ -250,6 +283,7 @@ public class WebConnect : MonoBehaviour
                         texture.LoadImage(bytes);
                         Image image = stageG.transform.Find("Image").GetComponent<Image>();
                         image.sprite = Sprite.Create(texture,new Rect(0,0,texture.width, texture.height), Vector2.zero);
+                        PlayerPrefs.SetString("MODE", "REEDIT");
                     }
                 }
             }
@@ -268,10 +302,6 @@ public class WebConnect : MonoBehaviour
             {
                 titleUI.errorPanel.SetActive(true);
                 titleUI.errorPanels[0].SetActive(true);
-            }
-            else
-            {
-                Debug.Log(www.downloadHandler.text);
             }
         }
     }
@@ -336,7 +366,12 @@ public class WebConnect : MonoBehaviour
                 layerCount++;
             }
         }
-
-        FadeManager.Instance.LoadScene("MainScene",1);
+        if (PlayerPrefs.GetString("MODE") == "REEDIT") {
+            FadeManager.Instance.LoadScene("EditScene",1);
+        }
+        else {
+            FadeManager.Instance.LoadScene("MainScene",1);
+        }
+        
     }
 }
