@@ -5,7 +5,6 @@ using UnityEngine.Networking;
 using SimpleJSON;
 using UnityEngine.UI;
 using System.IO;
-using System.Text;
 
 public class WebConnect : MonoBehaviour
 {
@@ -13,6 +12,7 @@ public class WebConnect : MonoBehaviour
     private AudioManager audiom;
     private MainUI mainUI;
     private string playerID;
+    private int playStageID;
     private string stageData;
     private Image image;
     private List<GameObject> bgList = new List<GameObject>();
@@ -28,6 +28,10 @@ public class WebConnect : MonoBehaviour
         mainUI = MainForOnline.Instance.mainUI;
         
         Invoke("CaptureScreenshot",1f);
+        
+        if (playStageID != 0) {
+            StartCoroutine(UpdatePlayCount());
+        }
     }
     private void CaptureScreenshot()
     {
@@ -183,6 +187,7 @@ public class WebConnect : MonoBehaviour
                         stageG.transform.localPosition = Vector3.zero;
                         stageG.transform.Find("Name").GetComponent<Text>().text = jsonArray[i].AsObject["stagename"];
                         stageG.transform.Find("player").GetComponent<Text>().text = jsonArray[i].AsObject["name"];
+                        stageG.transform.Find("count").GetComponent<Text>().text = "遊ばれた回数 : " + jsonArray[i].AsObject["nice"];
                         stageG.GetComponent<SetStageFromData>().stageID = jsonArray[i].AsObject["stageID"];
                         
                         byte[] bytes = System.Convert.FromBase64String(jsonArray[i].AsObject["image"]);
@@ -203,8 +208,9 @@ public class WebConnect : MonoBehaviour
         audiom.sounds[1].Play();
 
         WWWForm form = new WWWForm();
+        form.AddField("playerID", playerID);
         
-        using (UnityWebRequest www = UnityWebRequest.Post("http://taiyouserver.php.xdomain.jp/ReadData.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post("http://taiyouserver.php.xdomain.jp/ReadMyStage.php", form))
         {
             yield return www.SendWebRequest();
 
@@ -235,6 +241,7 @@ public class WebConnect : MonoBehaviour
                         stageG.transform.localPosition = Vector3.zero;
                         stageG.transform.Find("Name").GetComponent<Text>().text = jsonArray[i].AsObject["stagename"];
                         stageG.transform.Find("player").GetComponent<Text>().text = jsonArray[i].AsObject["name"];
+                        stageG.transform.Find("count").GetComponent<Text>().text = "遊ばれた回数 : " + jsonArray[i].AsObject["nice"];
                         stageG.GetComponent<SetStageFromData>().stageID = jsonArray[i].AsObject["stageID"];
                         
                         byte[] bytes = System.Convert.FromBase64String(jsonArray[i].AsObject["image"]);
@@ -248,13 +255,34 @@ public class WebConnect : MonoBehaviour
             }
         }
     }
+
+    public IEnumerator UpdatePlayCount()
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("stageID", playStageID);
+        using (UnityWebRequest www = UnityWebRequest.Post("http://taiyouserver.php.xdomain.jp/UpdatePlayCount.php", form))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                titleUI.errorPanel.SetActive(true);
+                titleUI.errorPanels[0].SetActive(true);
+            }
+            else
+            {
+                Debug.Log(www.downloadHandler.text);
+            }
+        }
+    }
+
     public IEnumerator SetStage(string stageID)
     {
         titleUI.connectWebPanel.SetActive(true);
         audiom.sounds[1].Play();
 
         WWWForm form = new WWWForm();
-        
+        playStageID = int.Parse(stageID);
         form.AddField("stageID", stageID);
         
         using (UnityWebRequest www = UnityWebRequest.Post("http://taiyouserver.php.xdomain.jp/SetStage.php", form))

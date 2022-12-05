@@ -28,6 +28,7 @@ public class TitleUIManager : MonoBehaviour
     public GameObject[] errorPanels;
     public GameObject connectWebPanel;
     public GameObject stageBG;
+    public GameObject stageMyBG;
 
     // RESISTER
     public GameObject[] newUserErrorPanel;
@@ -81,6 +82,7 @@ public class TitleUIManager : MonoBehaviour
         });
         showCreatePanel.onClick.AddListener(() => {
             ShowPanel(createPanel);
+            StartCoroutine(MainForOnline.Instance.web.ReadMyStage(stageMyBG));
         });
         showEveryOnePanel.onClick.AddListener(() => {
             ShowPanel(everyonePanel);
@@ -148,13 +150,6 @@ public class TitleUIManager : MonoBehaviour
         });
         createStage.onClick.AddListener(() => {
             StartCoroutine(WaitProcess());
-            // obj[0].SetActive(true);
-            // string data = WriteInStageData();
-            // ReadInStageData(data);
-            // audiom.bgm.DOFade(0,1);
-            // obj[3].SetActive(true);
-            // FadeManager.Instance.LoadScene("EditScene",1);
-            // obj[4].SetActive(true);
         });
 
         // RESISTER
