@@ -175,7 +175,6 @@ public class WebConnect : MonoBehaviour
                 mainUI.errorPanel.SetActive(true);
             }
             else {
-                Debug.Log(www.downloadHandler.text);
                 mainUI.uploadedPanel.SetActive(true);
             }
         }

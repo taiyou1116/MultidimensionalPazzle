@@ -13,7 +13,6 @@ public class SetStageFromData : MonoBehaviour
 
         button.onClick.AddListener(() => {
             MainForOnline main = GameObject.Find("MainANDweb").GetComponent<MainForOnline>();
-            // PlayerPrefs.SetString("MODE", "ONLINE");
             StartCoroutine(main.web.SetStage(stageID));
         });
     }

@@ -149,6 +149,7 @@ public class TitleUIManager : MonoBehaviour
             }
         });
         createStage.onClick.AddListener(() => {
+            PlayerPrefs.SetString("MODE", "EDIT");
             StartCoroutine(WaitProcess());
         });
 
