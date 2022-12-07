@@ -1,8 +1,0 @@
-言語,Language,
-オーディオ,Audio,
-ライセンス,License,
-閉じる,Close,
-ライセンス,License,
-音量設定,
-Audio Setting,
-言語,Language,
