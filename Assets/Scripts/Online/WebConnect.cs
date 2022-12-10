@@ -12,9 +12,11 @@ public class WebConnect : MonoBehaviour
     private AudioManager audiom;
     private MainUI mainUI;
     private string playerID;
-    private int playStageID;
+    private int playStageID = 0;
     private string stageData;
+    public string stageName;
     private List<GameObject> bgList = new List<GameObject>();
+    private Dictionary<int, string> stageNameDic = new Dictionary<int, string>();
 
     // Sceneをまなぐため
     public void Initialize()
@@ -28,9 +30,11 @@ public class WebConnect : MonoBehaviour
         
         Invoke("CaptureScreenshot",1f);
         
-        if (playStageID != 0) {
-            StartCoroutine(UpdatePlayCount());
-        }
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "MainScene") {
+            if (playStageID != 0) {
+                StartCoroutine(UpdatePlayCount());
+            }
+        } else playStageID = 0;
     }
     private void CaptureScreenshot()
     {
@@ -209,6 +213,7 @@ public class WebConnect : MonoBehaviour
                     Destroy(value);
                 }
                 bgList = new List<GameObject>();
+                stageNameDic = new Dictionary<int, string>();
                 if (jsonArray != null) {
                     for(int i = 0; i < jsonArray.Count; i++){
                         GameObject stageG = Instantiate(Resources.Load("Prefabs/stages") as GameObject);
@@ -228,6 +233,8 @@ public class WebConnect : MonoBehaviour
                         Image image = stageG.transform.Find("Image").GetComponent<Image>();
                         image.sprite = Sprite.Create(texture,new Rect(0,0,texture.width, texture.height), Vector2.zero);
                         PlayerPrefs.SetString("MODE", "ONLINE");
+
+                        stageNameDic.Add(jsonArray[i].AsObject["stageID"], jsonArray[i].AsObject["stagename"]);
                     }
                 }
             }
@@ -264,6 +271,7 @@ public class WebConnect : MonoBehaviour
                     Destroy(value);
                 }
                 bgList = new List<GameObject>();
+                stageNameDic = new Dictionary<int, string>();
                 if (jsonArray != null) {
                     for(int i = 0; i < jsonArray.Count; i++){
                         GameObject stageG = Instantiate(Resources.Load("Prefabs/stages") as GameObject);
@@ -367,10 +375,15 @@ public class WebConnect : MonoBehaviour
         }
         if (PlayerPrefs.GetString("MODE") == "REEDIT") {
             FadeManager.Instance.LoadScene("EditScene",1);
+        } else {
+            foreach (var value in stageNameDic) {
+                if (value.Key == playStageID) {
+                    stageName = value.Value;
+                    FadeManager.Instance.LoadScene("MainScene",1);
+                    return;
+                }
+            }
         }
-        else {
-            FadeManager.Instance.LoadScene("MainScene",1);
-        }
-        
+        Debug.Log("error");
     }
 }

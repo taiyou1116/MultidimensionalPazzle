@@ -29,6 +29,8 @@ public class StageManager : MonoBehaviour
     public GameObject fireWork;
     public GameObject key;
     public int stageNumber;
+    private float cameraRotation = 120;
+    private bool rotateNow;
     public List<GameObject> objList = new List<GameObject>();
     public Dictionary<GameObject, Vector3Int> moveObjPositionOnTile = new Dictionary<GameObject, Vector3Int>();
 
@@ -76,6 +78,30 @@ public class StageManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void SetFirstCamera()
+    {
+        if (SelectMode() == "ONLINE") {
+            mainUI.stageNumberText.gameObject.SetActive(false);
+            mainUI.playerStageNameText.gameObject.SetActive(true);
+            mainUI.playerStageNameText.text = MainForOnline.Instance.web.stageName;
+        }
+        if (SelectMode() == "ONLINE" || SelectMode() == "DEFAULT") {
+            changeStage.cinemachineBrain.enabled = false;
+            rotateNow = true;
+        }
+    }
+    private float currentTime;
+    private void Update()
+    {
+        if (!rotateNow) return;
+        if (currentTime >= 3) {
+            changeStage.cinemachineBrain.enabled = true;
+            rotateNow = false;
+        }
+        currentTime += Time.deltaTime;
+        changeStage.cinemachineBrain.gameObject.transform.RotateAround(new Vector3(4,0,4), new Vector3(0,1,0), cameraRotation * Time.deltaTime);
     }
     public void CreateStage()
     {

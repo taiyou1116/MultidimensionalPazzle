@@ -30,8 +30,7 @@ public class MainUI : MonoBehaviour
 
     [Header("TEXT")]
     public TextMeshProUGUI stageNumberText;
-    [SerializeField] Text[] languageText;
-    [SerializeField] TextAsset languageAsset;
+    public Text playerStageNameText;
     [SerializeField] Text stageName;
     public Text pickaxeText;
     public Text stoneText;
@@ -89,32 +88,6 @@ public class MainUI : MonoBehaviour
                 .Append(numberText.transform.DOMoveX(numberTextMovePos[2].position.x,0.5f).SetDelay(2f))
                 .AppendCallback(() => numberTextPanel.SetActive(false));
     }
-
-    private void LoadLanguageData()
-    {
-        string[] high = languageAsset.text.Split(new[] {'/','\n','\r'},System.StringSplitOptions.RemoveEmptyEntries);
-        int count = 0;
-        int textNum = 0;
-        for(int i = 0; i < high.Length; i++)
-        {
-            if(PlayerPrefs.GetInt("jap",0) == 0 && count == 0) 
-            {
-                languageText[textNum].text = high[i];
-                textNum++;
-            }
-            if(PlayerPrefs.GetInt("jap",0) == 1 && count == 1)
-            {
-                languageText[textNum].text = high[i];
-                textNum++;
-            }
-            count++;
-            if(count == 2)
-            {
-                count = 0;
-            } 
-        }
-    }
-
 
     // BUTTON 0
     private void BackEditScene()

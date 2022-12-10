@@ -59,6 +59,7 @@ public class GameManager : MonoBehaviour
         stage = gimic.stage;
         stage.LoadStageData();
         stage.CreateStage();
+        stage.SetFirstCamera();
         player = stage.player;
         changeStage = stage.changeStage;
         mainUI = stage.mainUI;
