@@ -47,9 +47,6 @@ public class GameManager : MonoBehaviour
         if (SelectMode() == "EDIT") {
             mainUI.stageNumberText.text = "TEST MODE";
         }
-        if (SelectMode() == "ONLINE") {
-            mainUI.stageNumberText.text = "EVERYONE STAGE";
-        }
 
         mainUI.pickaxeText.text = player.pickaxeCount.ToString();
         mainUI.stoneText.text = player.stoneCount.ToString();
@@ -59,11 +56,13 @@ public class GameManager : MonoBehaviour
         stage = gimic.stage;
         stage.LoadStageData();
         stage.CreateStage();
-        stage.SetFirstCamera();
         player = stage.player;
         changeStage = stage.changeStage;
         mainUI = stage.mainUI;
         changeStage.GetObj();
+        if (PlayerPrefs.GetString("FIRST", "YES") == "YES") {
+            stage.SetFirstCamera();
+        }
     }
     private void Update()
     {
@@ -258,7 +257,7 @@ public class GameManager : MonoBehaviour
         //save.ClearStage(stage.stageNumber);
         mainUI.goalPanel.SetActive(true);
         stage.stageNumber++;
-        player.vc.Priority = 10;
+        player.vc.Priority = 1;
         textAnim.Initialize();
         textAnim.Play(2f);
     }
@@ -280,7 +279,7 @@ public class GameManager : MonoBehaviour
     {
         stage.fireWork.SetActive(true);
         mainUI.onlinegoalPanel.SetActive(true);
-        player.vc.Priority = 10;
+        player.vc.Priority = 1;
         textAnimonline.Initialize();
         textAnimonline.Play(2f);
     }
@@ -488,7 +487,7 @@ public class GameManager : MonoBehaviour
     private void PlayerOperation()
     {
         operation.PageUpdate();
-        if (goal || operation.Operation) return;
+        if (goal || operation.Operation || stage.rotateNow) return;
         
         // PUTWALL
         if (Input.GetKeyDown(KeyCode.Space))
@@ -654,11 +653,13 @@ public class GameManager : MonoBehaviour
         // 遷移
         if (Input.GetKeyDown(KeyCode.R))
         {
+            PlayerPrefs.SetString("FIRST", "NO");
             Sounds.instance.bgm[0].DOFade(0,0.5f);
             FadeManager.Instance.LoadScene("MainScene",0.5f);
         }
         if (Input.GetKeyDown(KeyCode.H))
         {
+            PlayerPrefs.SetString("FIRST", "YES");
             Sounds.instance.bgm[0].DOFade(0,1);
             if (SelectMode() == "EDIT") {
                 FadeManager.Instance.LoadScene("EditScene",1f);
@@ -689,14 +690,19 @@ public class GameManager : MonoBehaviour
             mainUI.EndStage();
             return;
         }
+        PlayerPrefs.SetString("FIRST", "YES");
         StartCoroutine(StageUpdate());
     }
     // ステージの更新
     private IEnumerator StageUpdate() //ステージの更新
     {
         mainUI.ShowBlackPanel();
+        yield return new WaitForSeconds(0.5f);
+        player.vc.Priority = 0;
+        changeStage.virtualCamera[0].Priority = 1;
         // 暗転時間1秒
         yield return new WaitForSeconds(1f);
+        
         // ステージの初期化
         yield return new WaitUntil(() => StageInitialize());
         // MESHを受け取る
@@ -709,7 +715,7 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.SetInt("STAGENUMBER",stage.stageNumber);
         stage.LoadStageData();
         stage.CreateStage();
-        mainUI.StageTextAnim(stage.stageNumber);
+        stage.SetFirstCamera();
         player = stage.player;
         return true;
     }

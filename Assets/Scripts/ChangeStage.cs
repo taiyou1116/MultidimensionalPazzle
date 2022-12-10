@@ -12,7 +12,7 @@ public class ChangeStage : MonoBehaviour
     public List<Transform> pickaxeImage;
     public List<Transform> pickaxeObj;
     [SerializeField] Camera camera2D;
-    [SerializeField] CinemachineVirtualCamera[] virtualCamera;
+    public CinemachineVirtualCamera[] virtualCamera;
     public CinemachineBrain cinemachineBrain;
     private int cameraNumber;
     private bool stage2D = false;

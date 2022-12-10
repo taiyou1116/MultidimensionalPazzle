@@ -11,6 +11,7 @@ public class MainUI : MonoBehaviour
     public GameObject updateText;
     public GameObject numberTextPanel;
     public TextMeshProUGUI numberText;
+    public Text playerNameText;
     public Transform[] numberTextMovePos;
     public UnityEngine.UI.Image blackImage;
     public GameObject goalPanel;
@@ -68,7 +69,7 @@ public class MainUI : MonoBehaviour
         blackImage.gameObject.SetActive(true);
         Sequence sequence = DOTween.Sequence();
         sequence.Append(blackImage.DOFade(1,0.5f).SetEase(Ease.Linear))
-                .Append(blackImage.DOFade(0,0.5f).SetEase(Ease.Linear).SetDelay(2))
+                .Append(blackImage.DOFade(0,0.5f).SetEase(Ease.Linear).SetDelay(1.5f))
                 .AppendCallback(() => blackImage.gameObject.SetActive(false));
     }
 
@@ -80,13 +81,26 @@ public class MainUI : MonoBehaviour
 
     public void StageTextAnim(int num)
     {
-        numberTextPanel.SetActive(true);
-        numberText.text = "STAGE " + (num + 1);
-        Sequence sequence = DOTween.Sequence();
-        sequence.Append(numberText.transform.DOMoveX(numberTextMovePos[0].position.x,0))
-                .Append(numberText.transform.DOMoveX(numberTextMovePos[1].position.x,0.5f))
-                .Append(numberText.transform.DOMoveX(numberTextMovePos[2].position.x,0.5f).SetDelay(2f))
-                .AppendCallback(() => numberTextPanel.SetActive(false));
+        if (PlayerPrefs.GetString("MODE") == "DEFAULT") {
+            playerNameText.gameObject.SetActive(false);
+            numberTextPanel.SetActive(true);
+            numberText.text = "STAGE " + (num + 1);
+            Sequence sequence = DOTween.Sequence();
+            sequence.Append(numberText.transform.DOMoveX(numberTextMovePos[0].position.x,0))
+                    .Append(numberText.transform.DOMoveX(numberTextMovePos[1].position.x,0.5f))
+                    .Append(numberText.transform.DOMoveX(numberTextMovePos[2].position.x,0.5f).SetDelay(2f))
+                    .AppendCallback(() => numberTextPanel.SetActive(false));
+        }
+        if (PlayerPrefs.GetString("MODE") == "ONLINE") {
+            numberText.gameObject.SetActive(false);
+            numberTextPanel.SetActive(true);
+            playerNameText.text = MainForOnline.Instance.web.stageName;
+            Sequence sequence = DOTween.Sequence();
+            sequence.Append(playerNameText.transform.DOMoveX(numberTextMovePos[0].position.x,0))
+                    .Append(playerNameText.transform.DOMoveX(numberTextMovePos[1].position.x,0.5f))
+                    .Append(playerNameText.transform.DOMoveX(numberTextMovePos[2].position.x,0.5f).SetDelay(2f))
+                    .AppendCallback(() => numberTextPanel.SetActive(false));
+        }
     }
 
     // BUTTON 0

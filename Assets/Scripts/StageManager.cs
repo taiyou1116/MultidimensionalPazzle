@@ -30,7 +30,8 @@ public class StageManager : MonoBehaviour
     public GameObject key;
     public int stageNumber;
     private float cameraRotation = 120;
-    private bool rotateNow;
+    private float currentTime;
+    public bool rotateNow;
     public List<GameObject> objList = new List<GameObject>();
     public Dictionary<GameObject, Vector3Int> moveObjPositionOnTile = new Dictionary<GameObject, Vector3Int>();
 
@@ -54,6 +55,11 @@ public class StageManager : MonoBehaviour
                 string a = File.ReadAllText(path);
                 high = a.Split(new[] {'.'},System.StringSplitOptions.RemoveEmptyEntries);
             break;
+        }
+        if (SelectMode() == "ONLINE") {
+            mainUI.stageNumberText.gameObject.SetActive(false);
+            mainUI.playerStageNameText.gameObject.SetActive(true);
+            mainUI.playerStageNameText.text = MainForOnline.Instance.web.stageName;
         }
 
         // TEXTFILEの情報を読み込む
@@ -80,29 +86,6 @@ public class StageManager : MonoBehaviour
         }
     }
 
-    public void SetFirstCamera()
-    {
-        if (SelectMode() == "ONLINE") {
-            mainUI.stageNumberText.gameObject.SetActive(false);
-            mainUI.playerStageNameText.gameObject.SetActive(true);
-            mainUI.playerStageNameText.text = MainForOnline.Instance.web.stageName;
-        }
-        if (SelectMode() == "ONLINE" || SelectMode() == "DEFAULT") {
-            changeStage.cinemachineBrain.enabled = false;
-            rotateNow = true;
-        }
-    }
-    private float currentTime;
-    private void Update()
-    {
-        if (!rotateNow) return;
-        if (currentTime >= 3) {
-            changeStage.cinemachineBrain.enabled = true;
-            rotateNow = false;
-        }
-        currentTime += Time.deltaTime;
-        changeStage.cinemachineBrain.gameObject.transform.RotateAround(new Vector3(4,0,4), new Vector3(0,1,0), cameraRotation * Time.deltaTime);
-    }
     public void CreateStage()
     {
         for (int y = 0; y < tileAll.GetLength(1); y++)
@@ -164,5 +147,26 @@ public class StageManager : MonoBehaviour
         changeStage.objs = new List<GameObject>();
         fireWork.SetActive(false);
         Sounds.instance.bgm[0].Play();
+    }
+
+    public void SetFirstCamera()
+    {
+        if (SelectMode() == "ONLINE" || SelectMode() == "DEFAULT") {
+            changeStage.cinemachineBrain.enabled = false;
+            mainUI.StageTextAnim(stageNumber);
+            rotateNow = true;
+        }
+    }
+    
+    private void Update()
+    {
+        if (!rotateNow) return;
+        if (currentTime >= 3) {
+            changeStage.cinemachineBrain.enabled = true;
+            rotateNow = false;
+            currentTime = 0;
+        }
+        currentTime += Time.deltaTime;
+        changeStage.cinemachineBrain.gameObject.transform.RotateAround(new Vector3(4,0,4), new Vector3(0,1,0), cameraRotation * Time.deltaTime);
     }
 }
