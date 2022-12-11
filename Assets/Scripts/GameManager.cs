@@ -685,7 +685,7 @@ public class GameManager : MonoBehaviour
     // 次のステージへ
     public void ShowStageNumber()
     {
-        if(stage.stageNumber == 23)
+        if(stage.stageNumber == 30)
         {
             mainUI.EndStage();
             return;
