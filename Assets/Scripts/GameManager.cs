@@ -56,6 +56,7 @@ public class GameManager : MonoBehaviour
         stage = gimic.stage;
         stage.LoadStageData();
         stage.CreateStage();
+        save = GameObject.Find("SaveData").GetComponent<SaveData>()!;
         player = stage.player;
         changeStage = stage.changeStage;
         mainUI = stage.mainUI;
@@ -254,7 +255,7 @@ public class GameManager : MonoBehaviour
     // ストーリーモードのゴール処理
     private void StoryGoal()
     {
-        //save.ClearStage(stage.stageNumber);
+        save.ClearStage(stage.stageNumber);
         mainUI.goalPanel.SetActive(true);
         stage.stageNumber++;
         player.vc.Priority = 1;

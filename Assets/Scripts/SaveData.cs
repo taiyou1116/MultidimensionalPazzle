@@ -6,13 +6,13 @@ public class SaveData : MonoBehaviour
 {
     public bool[] stageClears;
     public GameObject[] stars;
-    /*void Start()
+    void Start()
     {
         DontDestroyOnLoad(this.gameObject);
-        stageClears = new bool[25];
-        //PlayerPrefs.SetString("Save","first");
+        stageClears = new bool[30];
+        // PlayerPrefs.SetString("SAVE","FIRST");
         ShowStar();
-    }*/
+    }
     public void ClearStage(int num)
     {
         stageClears[num] = true;
@@ -31,20 +31,20 @@ public class SaveData : MonoBehaviour
         SaveInfo saveInfo = new SaveInfo();
         saveInfo.stageClears = stageClears;
         string json = JsonUtility.ToJson(saveInfo);
-        PlayerPrefs.SetString("Save",json);
+        PlayerPrefs.SetString("SAVE",json);
         PlayerPrefs.Save();
     }
     private void Load()
     {
-        if(PlayerPrefs.GetString("Save","first") == "first") return;
-        SaveInfo savedata = SaveInfo.CreateFromJson(PlayerPrefs.GetString("Save","first"));
+        if(PlayerPrefs.GetString("SAVE","FIRST") == "FIRST") return;
+        SaveInfo savedata = SaveInfo.CreateFromJson(PlayerPrefs.GetString("SAVE","FIRST"));
         stageClears = savedata.stageClears;
     }
 }
 [System.Serializable]
 public class SaveInfo
 {
-    public bool[] stageClears = new bool[25];
+    public bool[] stageClears = new bool[30];
     public static SaveInfo CreateFromJson(string jsonString)
     {
         return JsonUtility.FromJson<SaveInfo>(jsonString);

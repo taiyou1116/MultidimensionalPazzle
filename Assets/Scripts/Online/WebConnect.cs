@@ -344,17 +344,24 @@ public class WebConnect : MonoBehaviour
     string rows = "";
     private void ReadInStageData()
     {
+        rows = "";
         string path = Application.dataPath + "/test.txt";
         StreamWriter sw = new StreamWriter(path,false);
         
         int count = 0;
         int layerCount = 0;
+        int fiishCount = 0;
 
         for(int i = 0; i < stageData.Length; i++)
         {
             rows += stageData[i] + ",";
             count++;
-            if (layerCount == 8 && count == 9) //i % 8 == 0 && i != 0
+            if (count == 9 && layerCount == 8 && fiishCount == 5)
+            {
+                string result = rows.Substring(0, rows.Length - 1);
+                sw.Write(result + "\n");
+            }
+            else if (layerCount == 8 && count == 9) //i % 8 == 0 && i != 0
             {
                 string result = rows.Substring(0, rows.Length - 1) + ".";
                 sw.Write(result + "\n");// ファイルに書き出したあと改行
@@ -362,6 +369,7 @@ public class WebConnect : MonoBehaviour
 
                 count = 0;
                 layerCount = 0;
+                fiishCount++;
             }
             else if (count == 9)
             {
@@ -373,6 +381,8 @@ public class WebConnect : MonoBehaviour
                 layerCount++;
             }
         }
+        sw.Close();
+
         if (PlayerPrefs.GetString("MODE") == "REEDIT") {
             FadeManager.Instance.LoadScene("EditScene",1);
         } else {
@@ -384,6 +394,5 @@ public class WebConnect : MonoBehaviour
                 }
             }
         }
-        Debug.Log("error");
     }
 }
