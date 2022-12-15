@@ -56,21 +56,17 @@ public class WebConnect : MonoBehaviour
 
             titleUI.connectWebPanel.SetActive(false);
 
-            if (www.result != UnityWebRequest.Result.Success)
-            {
+            if (www.result != UnityWebRequest.Result.Success) {
                 titleUI.errorPanel.SetActive(true);
                 titleUI.errorPanels[0].SetActive(true);
             }
-            else
-            {
-                if(www.downloadHandler.text.Contains("Wrong Credentionals") || www.downloadHandler.text.Contains("Username does not exists"))
-                {
+            else {
+                if(www.downloadHandler.text.Contains("Wrong Credentionals") || www.downloadHandler.text.Contains("Username does not exists")) {
                     titleUI.errorPanel.SetActive(true);
                     titleUI.errorPanels[1].SetActive(true);
                     Debug.Log("Try Again.");
                 }
-                else
-                {
+                else {
                     //if we logged in correctly
                     MainForOnline.Instance.login.gameObject.SetActive(false);
                     MainForOnline.Instance.onlinePanel.SetActive(true);
@@ -96,13 +92,11 @@ public class WebConnect : MonoBehaviour
 
             titleUI.connectWebPanel.SetActive(false);
 
-            if (www.result != UnityWebRequest.Result.Success)
-            {
+            if (www.result != UnityWebRequest.Result.Success) {
                 titleUI.errorPanel.SetActive(true);
                 titleUI.errorPanels[0].SetActive(true);
             }
-            else
-            {
+            else {
                 string result = www.downloadHandler.text;
 
                 if (result == "Username is already taken") {
@@ -197,13 +191,11 @@ public class WebConnect : MonoBehaviour
 
             titleUI.connectWebPanel.SetActive(false);
 
-            if (www.result != UnityWebRequest.Result.Success)
-            {
+            if (www.result != UnityWebRequest.Result.Success) {
                 titleUI.errorPanel.SetActive(true);
                 titleUI.errorPanels[0].SetActive(true);
             }
-            else
-            {
+            else {
                 string json = www.downloadHandler.text;
 
                 JSONArray jsonArray = JSON.Parse(json) as JSONArray;
@@ -215,7 +207,7 @@ public class WebConnect : MonoBehaviour
                 bgList = new List<GameObject>();
                 stageNameDic = new Dictionary<int, string>();
                 if (jsonArray != null) {
-                    for(int i = 0; i < jsonArray.Count; i++){
+                    for(int i = 0; i < jsonArray.Count; i++) {
                         GameObject stageG = Instantiate(Resources.Load("Prefabs/stages") as GameObject);
                         bgList.Add(stageG);
                         stageG.transform.SetParent(parent.transform);
@@ -255,13 +247,11 @@ public class WebConnect : MonoBehaviour
 
             titleUI.connectWebPanel.SetActive(false);
 
-            if (www.result != UnityWebRequest.Result.Success)
-            {
+            if (www.result != UnityWebRequest.Result.Success) {
                 titleUI.errorPanel.SetActive(true);
                 titleUI.errorPanels[0].SetActive(true);
             }
-            else
-            {
+            else {
                 string json = www.downloadHandler.text;
 
                 JSONArray jsonArray = JSON.Parse(json) as JSONArray;
@@ -273,7 +263,7 @@ public class WebConnect : MonoBehaviour
                 bgList = new List<GameObject>();
                 stageNameDic = new Dictionary<int, string>();
                 if (jsonArray != null) {
-                    for(int i = 0; i < jsonArray.Count; i++){
+                    for(int i = 0; i < jsonArray.Count; i++) {
                         GameObject stageG = Instantiate(Resources.Load("Prefabs/stages") as GameObject);
                         bgList.Add(stageG);
                         stageG.transform.SetParent(parent.transform);
@@ -305,10 +295,38 @@ public class WebConnect : MonoBehaviour
         {
             yield return www.SendWebRequest();
 
-            if (www.result != UnityWebRequest.Result.Success)
-            {
+            if (www.result != UnityWebRequest.Result.Success) {
                 titleUI.errorPanel.SetActive(true);
                 titleUI.errorPanels[0].SetActive(true);
+            }
+        }
+    }
+
+    public IEnumerator DownloadStage(string id)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("stageID", id);
+        using (UnityWebRequest www = UnityWebRequest.Post("http://taiyouserver.php.xdomain.jp/DownloadStage.php", form))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success) {
+                titleUI.errorPanel.SetActive(true);
+                titleUI.errorPanels[0].SetActive(true);
+            }
+            else {
+                SQLiteDB sQLiteDB = GameObject.Find("SQLite").GetComponent<SQLiteDB>();
+
+                string json = www.downloadHandler.text;
+                JSONArray jsonArray = JSON.Parse(json) as JSONArray;
+                // 元はfor
+                    string stageName = jsonArray[0].AsObject["stagename"];
+                    string stageData = jsonArray[0].AsObject["data"];
+                    string stageID = jsonArray[0].AsObject["stageID"];
+                    string stageImage = jsonArray[0].AsObject["image"];
+                    string userName = jsonArray[0].AsObject["name"];
+                    sQLiteDB.InsertData(stageName, stageData, stageImage, int.Parse(stageID));
+                    // Debug.Log(stageName + stageData + stageID + stageImage + userName);
             }
         }
     }
@@ -328,13 +346,11 @@ public class WebConnect : MonoBehaviour
 
             titleUI.connectWebPanel.SetActive(false);
 
-            if (www.result != UnityWebRequest.Result.Success)
-            {
+            if (www.result != UnityWebRequest.Result.Success) {
                 titleUI.errorPanel.SetActive(true);
                 titleUI.errorPanels[0].SetActive(true);
             }
-            else
-            {
+            else {
                 stageData = www.downloadHandler.text;
                 ReadInStageData();
             }
@@ -356,13 +372,12 @@ public class WebConnect : MonoBehaviour
         {
             rows += stageData[i] + ",";
             count++;
-            if (count == 9 && layerCount == 8 && fiishCount == 5)
-            {
+            if (count == 9 && layerCount == 8 && fiishCount == 5) {
                 string result = rows.Substring(0, rows.Length - 1);
                 sw.Write(result + "\n");
             }
-            else if (layerCount == 8 && count == 9) //i % 8 == 0 && i != 0
-            {
+            else if (layerCount == 8 && count == 9) {
+                //i % 8 == 0 && i != 0
                 string result = rows.Substring(0, rows.Length - 1) + ".";
                 sw.Write(result + "\n");// ファイルに書き出したあと改行
                 rows = "";
@@ -371,8 +386,7 @@ public class WebConnect : MonoBehaviour
                 layerCount = 0;
                 fiishCount++;
             }
-            else if (count == 9)
-            {
+            else if (count == 9) {
                 string result = rows.Substring(0, rows.Length - 1);
                 sw.WriteLine(result);// ファイルに書き出したあと改行
                 rows = "";
