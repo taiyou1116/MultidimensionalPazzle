@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.IO;
+using UnityEngine.UI;
 using SQLiteUnity;
-using SimpleJSON;
 
 public class SQLiteDB : MonoBehaviour
 {
@@ -67,12 +66,15 @@ public class SQLiteDB : MonoBehaviour
     {
         string selectQuery = "SELECT name, data FROM `stages`";
         SQLiteTable result = sqlite.ExecuteQuery(selectQuery);
-        foreach (var value in result) {
-            GameObject stageG = Instantiate(Resources.Load("Prefabs/stages") as GameObject);
+
+        foreach (SQLiteRow dr in result.Rows) {
+            GameObject stageG = Instantiate(Resources.Load("Prefabs/DLstages") as GameObject);
             stageG.transform.SetParent(parent.transform);
             stageG.transform.localScale = Vector3.one;
             stageG.transform.localPosition = Vector3.zero;
+
+            stageG.transform.Find("Name").GetComponent<Text>().text = (string)dr["name"];
+            stageG.GetComponent<SetStageFromSQLite>().stageData = (string)dr["data"];
         }
-        
     }
 }
