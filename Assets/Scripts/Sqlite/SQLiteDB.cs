@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using SQLiteUnity;
+using SimpleJSON;
 
 public class SQLiteDB : MonoBehaviour
 {
@@ -62,10 +63,16 @@ public class SQLiteDB : MonoBehaviour
         sqlite.ExecuteQuery(string.Format("DELETE FROM stages WHERE name = 'kaede_kujo'"));
     }
 
-    private void GetSQLiteDBData()
+    public void GetSQLiteDBData(GameObject parent)
     {
-        var selectQuery = "SELECT * FROM `stages`";
-        var result = sqlite.ExecuteQuery(selectQuery);
-        Debug.Log(result);
+        string selectQuery = "SELECT name, data FROM `stages`";
+        SQLiteTable result = sqlite.ExecuteQuery(selectQuery);
+        foreach (var value in result) {
+            GameObject stageG = Instantiate(Resources.Load("Prefabs/stages") as GameObject);
+            stageG.transform.SetParent(parent.transform);
+            stageG.transform.localScale = Vector3.one;
+            stageG.transform.localPosition = Vector3.zero;
+        }
+        
     }
 }

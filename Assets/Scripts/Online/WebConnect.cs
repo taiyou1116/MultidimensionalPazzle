@@ -320,13 +320,12 @@ public class WebConnect : MonoBehaviour
                 string json = www.downloadHandler.text;
                 JSONArray jsonArray = JSON.Parse(json) as JSONArray;
                 // 元はfor
-                    string stageName = jsonArray[0].AsObject["stagename"];
-                    string stageData = jsonArray[0].AsObject["data"];
-                    string stageID = jsonArray[0].AsObject["stageID"];
-                    string stageImage = jsonArray[0].AsObject["image"];
-                    string userName = jsonArray[0].AsObject["name"];
-                    sQLiteDB.InsertData(stageName, stageData, stageImage, int.Parse(stageID));
-                    // Debug.Log(stageName + stageData + stageID + stageImage + userName);
+                string stageName = jsonArray[0].AsObject["stagename"];
+                string stageData = jsonArray[0].AsObject["data"];
+                string stageID = jsonArray[0].AsObject["stageID"];
+                string stageImage = jsonArray[0].AsObject["image"];
+                string userName = jsonArray[0].AsObject["name"];
+                sQLiteDB.InsertData(stageName, stageData, stageImage, int.Parse(stageID));
             }
         }
     }

@@ -17,6 +17,7 @@ public class TitleUIManager : MonoBehaviour
     [SerializeField] GameObject optionPanel;
     [SerializeField] GameObject[] optionPanels;
     [SerializeField] GameObject onlinePanel;
+    [SerializeField] GameObject dLPanel;
     [SerializeField] GameObject createPanel;
     [SerializeField] GameObject everyonePanel;
     [SerializeField] GameObject mainPanel;
@@ -29,6 +30,7 @@ public class TitleUIManager : MonoBehaviour
     public GameObject connectWebPanel;
     public GameObject stageBG;
     public GameObject stageMyBG;
+    public GameObject stageDLBG;
 
     // RESISTER
     public GameObject[] newUserErrorPanel;
@@ -39,6 +41,7 @@ public class TitleUIManager : MonoBehaviour
     [SerializeField] Button closeOptionPanelButton;
     [SerializeField] Button showMainPanel;
     [SerializeField] Button showOnlinePanel;
+    [SerializeField] Button showDLPanel;
     [SerializeField] Button showCreatePanel;
     [SerializeField] Button showEveryOnePanel;
     [SerializeField] Button showloginPanel;
@@ -79,6 +82,11 @@ public class TitleUIManager : MonoBehaviour
         });
         showOnlinePanel.onClick.AddListener(() => {
             ShowPanel(onlinePanel);
+        });
+        showDLPanel.onClick.AddListener(() => {
+            ShowPanel(dLPanel);
+            SQLiteDB dB = GameObject.Find("SQLite").GetComponent<SQLiteDB>();
+            dB.GetSQLiteDBData(stageDLBG);
         });
         showCreatePanel.onClick.AddListener(() => {
             ShowPanel(createPanel);
@@ -197,6 +205,7 @@ public class TitleUIManager : MonoBehaviour
         newUserPanel.SetActive(false);
         errorPanel.SetActive(false);
         connectWebPanel.SetActive(false);
+        dLPanel.SetActive(false);
     }
     public void PanelsTrue()
     {
