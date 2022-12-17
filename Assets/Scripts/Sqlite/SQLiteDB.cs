@@ -78,6 +78,7 @@ public class SQLiteDB : MonoBehaviour
             stageG.transform.localPosition = Vector3.zero;
 
             stageG.transform.Find("Name").GetComponent<Text>().text = (string)dr["name"];
+            stageG.GetComponent<SetStageFromSQLite>().stageName = (string)dr["name"];
             stageG.GetComponent<SetStageFromSQLite>().stageData = (string)dr["data"];
             stageG.GetComponent<SetStageFromSQLite>().originID = (int)dr["originID"];
 

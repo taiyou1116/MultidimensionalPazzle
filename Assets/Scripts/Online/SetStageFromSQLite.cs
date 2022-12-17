@@ -8,6 +8,7 @@ public class SetStageFromSQLite : MonoBehaviour
 {
     public int originID{get; set;}
     public string stageData{private get; set;}
+    public string stageName{get; set;}
     private Button startButton;
     private Button deleteButton;
 
@@ -17,6 +18,8 @@ public class SetStageFromSQLite : MonoBehaviour
         deleteButton = transform.GetChild(5).GetComponent<Button>();
         
         startButton.onClick.AddListener(() => {
+            PlayerPrefs.SetString("MODE", "ONLINE");
+            MainForOnline.Instance.web.stageName = stageName;
             ReadInStageData();
         });
         deleteButton.onClick.AddListener(() => {

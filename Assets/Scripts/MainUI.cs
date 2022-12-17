@@ -25,6 +25,7 @@ public class MainUI : MonoBehaviour
     public GameObject loadPanel;
     public GameObject uploadedPanel;
     public GameObject updatePanel;
+    public GameObject leftUIs;
 
     [Header("BUTTON")]
     public Button[] editButton;
@@ -40,7 +41,6 @@ public class MainUI : MonoBehaviour
     void Start()
     {
         goalPanel.SetActive(false);
-
         editButton[0].onClick.AddListener(() => {
             BackEditScene();
         });

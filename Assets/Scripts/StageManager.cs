@@ -54,12 +54,11 @@ public class StageManager : MonoBehaviour
                 string path = Application.dataPath + "/test.txt";
                 string a = File.ReadAllText(path);
                 high = a.Split(new[] {'.'},System.StringSplitOptions.RemoveEmptyEntries);
+                
+                mainUI.stageNumberText.gameObject.SetActive(false);
+                mainUI.playerStageNameText.gameObject.SetActive(true);
+                mainUI.playerStageNameText.text = MainForOnline.Instance.web.stageName;
             break;
-        }
-        if (SelectMode() == "ONLINE") {
-            mainUI.stageNumberText.gameObject.SetActive(false);
-            mainUI.playerStageNameText.gameObject.SetActive(true);
-            mainUI.playerStageNameText.text = MainForOnline.Instance.web.stageName;
         }
 
         // TEXTFILEの情報を読み込む
@@ -151,11 +150,10 @@ public class StageManager : MonoBehaviour
 
     public void SetFirstCamera()
     {
-        if (SelectMode() == "ONLINE" || SelectMode() == "DEFAULT") {
-            changeStage.cinemachineBrain.enabled = false;
-            mainUI.StageTextAnim(stageNumber);
-            rotateNow = true;
-        }
+        changeStage.cinemachineBrain.enabled = false;
+        mainUI.leftUIs.SetActive(false);
+        mainUI.StageTextAnim(stageNumber);
+        rotateNow = true;
     }
     
     private void Update()
@@ -163,6 +161,7 @@ public class StageManager : MonoBehaviour
         if (!rotateNow) return;
         if (currentTime >= 3) {
             changeStage.cinemachineBrain.enabled = true;
+            mainUI.leftUIs.SetActive(true);
             rotateNow = false;
             currentTime = 0;
         }
