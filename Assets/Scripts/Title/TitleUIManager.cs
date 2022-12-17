@@ -115,18 +115,6 @@ public class TitleUIManager : MonoBehaviour
             ShowPanel(titlePanel);
             titleImage.SetActive(true);
         });
-        // backMain[0].onClick.AddListener(() => {
-        //     ShowPanel(mainPanel);
-        // });
-        // backMain[1].onClick.AddListener(() => {
-        //     ShowPanel(mainPanel);
-        // });
-        // backMain[2].onClick.AddListener(() => {
-        //     ShowPanel(mainPanel);
-        // });
-        // backMain[3].onClick.AddListener(() => {
-        //     ShowPanel(mainPanel);
-        // });
         BackMain();
         backOnline[0].onClick.AddListener(() => {
             ShowPanel(onlinePanel);

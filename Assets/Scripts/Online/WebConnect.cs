@@ -356,7 +356,7 @@ public class WebConnect : MonoBehaviour
         }
     }
 
-    string rows = "";
+    private string rows = "";
     private void ReadInStageData()
     {
         rows = "";
