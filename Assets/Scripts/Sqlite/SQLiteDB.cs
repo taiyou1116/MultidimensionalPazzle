@@ -43,9 +43,7 @@ public class SQLiteDB : MonoBehaviour
     public void InsertData(string sname, string sdata, string simage, int originID)
     {
         // id, name, data, image, originID
-        for (int i = 0; i < sname.Length; i++) {
-            sqlite.ExecuteQuery(string.Format("INSERT INTO `stages` VALUES (null, '{0}', '{1}', '{2}', '{3}', '{4}')", sname, sdata, simage, originID, 0));
-        }
+        sqlite.ExecuteQuery(string.Format("INSERT INTO `stages` VALUES (null, '{0}', '{1}', '{2}', '{3}', '{4}')", sname, sdata, simage, originID, 0));
     }
 
     private void UpdateData()

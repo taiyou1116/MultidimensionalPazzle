@@ -304,12 +304,17 @@ public class WebConnect : MonoBehaviour
 
     public IEnumerator DownloadStage(string id)
     {
+        titleUI.connectWebPanel.SetActive(true);
+        audiom.sounds[1].Play();
+
         WWWForm form = new WWWForm();
         form.AddField("stageID", id);
         using (UnityWebRequest www = UnityWebRequest.Post("http://taiyouserver.php.xdomain.jp/DownloadStage.php", form))
         {
             yield return www.SendWebRequest();
 
+            titleUI.connectWebPanel.SetActive(false);
+            
             if (www.result != UnityWebRequest.Result.Success) {
                 titleUI.errorPanel.SetActive(true);
                 titleUI.errorPanels[0].SetActive(true);
@@ -318,13 +323,12 @@ public class WebConnect : MonoBehaviour
                 SQLiteDB sQLiteDB = GameObject.Find("SQLite").GetComponent<SQLiteDB>();
 
                 string json = www.downloadHandler.text;
-                JSONArray jsonArray = JSON.Parse(json) as JSONArray;
-                // 元はfor
-                string stageName = jsonArray[0].AsObject["stagename"];
-                string stageData = jsonArray[0].AsObject["data"];
-                string stageID = jsonArray[0].AsObject["stageID"];
-                string stageImage = jsonArray[0].AsObject["image"];
-                string userName = jsonArray[0].AsObject["name"];
+                JSONNode jsonNode = JSON.Parse(json) as JSONNode;
+        
+                string stageName = jsonNode.AsObject["stagename"];
+                string stageData = jsonNode.AsObject["data"];
+                string stageID = jsonNode.AsObject["stageID"];
+                string stageImage = jsonNode.AsObject["image"];
                 sQLiteDB.InsertData(stageName, stageData, stageImage, int.Parse(stageID));
             }
         }
