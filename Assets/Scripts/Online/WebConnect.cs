@@ -217,6 +217,7 @@ public class WebConnect : MonoBehaviour
                         stageG.transform.Find("player").GetComponent<Text>().text = jsonArray[i].AsObject["name"];
                         stageG.transform.Find("count").GetComponent<Text>().text = "遊ばれた回数 : " + jsonArray[i].AsObject["nice"];
                         stageG.GetComponent<SetStageFromData>().stageID = jsonArray[i].AsObject["stageID"];
+                        stageG.transform.Find("delete").gameObject.SetActive(false);
                         
                         byte[] bytes = System.Convert.FromBase64String(jsonArray[i].AsObject["image"]);
                     
