@@ -88,7 +88,7 @@ public class GameManager : MonoBehaviour
         nextDire = direction;
         //MOVE処理
         Action<DIRECTION> func = MoveInThreedImensions;
-        if (!changeStage.Stage2D) {
+        if (!changeStage.stage2D) {
             func(direction);
         } else {
             func = MoveInTwoImensions;
@@ -490,7 +490,7 @@ public class GameManager : MonoBehaviour
         // PUTWALL
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (changeStage.Stage2D) {
+            if (changeStage.stage2D) {
                 nextPutPos = GetNextPlayerPositionOnTile(nextPlayerPositionOnTile,nextDire);
                 if (nextPutPos.x == 9 || nextPutPos.x == -1 || nextPutPos.z == 9 || nextPutPos.z == -1) {
                     return;

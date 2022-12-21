@@ -11,13 +11,13 @@ public class ChangeStage : MonoBehaviour
     public List<GameObject> pickaxes;
     public List<Transform> pickaxeImage;
     public List<Transform> pickaxeObj;
-    [SerializeField] Camera camera2D;
+    [SerializeField] CinemachineVirtualCamera camera2D;
+    [SerializeField] Camera camera2DObj;
     public CinemachineVirtualCamera[] virtualCamera;
     public CinemachineBrain cinemachineBrain;
     private int cameraNumber;
-    private bool stage2D = false;
+    public bool stage2D{get; private set;}
     public int CameraNumber{get{return cameraNumber;}}
-    public bool Stage2D{get{return stage2D;}}
     
     public void GetObj()
     {
@@ -39,7 +39,7 @@ public class ChangeStage : MonoBehaviour
             meshs.Add(objs[i].GetComponent<MeshRenderer>());
         }
         stage2D = false;
-        camera2D.depth = -1;
+        camera2D.Priority = -1;
         children[2].gameObject.SetActive(false);
 
         foreach (var value in pickaxeImage) {
@@ -50,10 +50,10 @@ public class ChangeStage : MonoBehaviour
     {
         if(stage2D)
         {
-            camera2D.depth = -1;
+            camera2D.Priority = -1;
+            camera2DObj.depth = -1;
             stage2D = false;
-            foreach(var mesh in meshs)
-            {
+            foreach(var mesh in meshs) {
                 mesh.receiveShadows = true;
             }
             
@@ -72,12 +72,21 @@ public class ChangeStage : MonoBehaviour
 
             Sounds.instance.se[5].Play();
         }
-        else if(!stage2D)
-        {
+        else if(!stage2D) {
+            camera2DObj.transform.eulerAngles = CameraSet(cameraNumber);
             camera2D.transform.eulerAngles = CameraSet(cameraNumber);
-            
-            camera2D.depth = 1;
+            camera2D.Priority = 2;
+            StartCoroutine(ThreeToTwo());
+        }
+    }
+
+    private IEnumerator ThreeToTwo()
+    {
+        yield return new WaitForSeconds(1f);
+        if (!stage2D) {
+            camera2DObj.depth = 1;
             stage2D = true;
+
             foreach(var mesh in meshs)
             {
                 mesh.receiveShadows = false;
@@ -99,7 +108,7 @@ public class ChangeStage : MonoBehaviour
             Sounds.instance.se[6].Play();
         }
     }
-
+    
     private Vector3 CameraSet(int num)
     {
         switch (num)
