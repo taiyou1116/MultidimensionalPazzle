@@ -12,7 +12,6 @@ public class SQLiteDB : MonoBehaviour
     private GameObject objParent;
     private List<GameObject> dlStageList = new List<GameObject>();
 
-    // originIDを見比べて同じだった場合はSQLiteDBから 他の場合はOLINEから取得
     public void Start()
     {
         CreateDB();

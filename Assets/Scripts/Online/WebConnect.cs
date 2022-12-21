@@ -15,6 +15,7 @@ public class WebConnect : MonoBehaviour
     private int playStageID = 0;
     private string stageData;
     public string stageName;
+    private string rows = "";
     private List<GameObject> bgList = new List<GameObject>();
     private Dictionary<int, string> stageNameDic = new Dictionary<int, string>();
 
@@ -334,6 +335,28 @@ public class WebConnect : MonoBehaviour
             }
         }
     }
+    public IEnumerator RemoveStage(string id)
+    {
+        titleUI.connectWebPanel.SetActive(true);
+        audiom.sounds[1].Play();
+
+        WWWForm form = new WWWForm();
+        form.AddField("stageID", id);
+        using (UnityWebRequest www = UnityWebRequest.Post("http://taiyouserver.php.xdomain.jp/RemoveStage.php", form))
+        {
+            yield return www.SendWebRequest();
+
+            titleUI.connectWebPanel.SetActive(false);
+            
+            if (www.result != UnityWebRequest.Result.Success) {
+                titleUI.errorPanel.SetActive(true);
+                titleUI.errorPanels[0].SetActive(true);
+            }
+            else {
+                string json = www.downloadHandler.text;
+            }
+        }
+    }
 
     public IEnumerator SetStage(string stageID)
     {
@@ -361,7 +384,6 @@ public class WebConnect : MonoBehaviour
         }
     }
 
-    private string rows = "";
     private void ReadInStageData()
     {
         rows = "";
@@ -381,7 +403,6 @@ public class WebConnect : MonoBehaviour
                 sw.Write(result + "\n");
             }
             else if (layerCount == 8 && count == 9) {
-                //i % 8 == 0 && i != 0
                 string result = rows.Substring(0, rows.Length - 1) + ".";
                 sw.Write(result + "\n");// ファイルに書き出したあと改行
                 rows = "";
