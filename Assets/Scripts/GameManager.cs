@@ -83,7 +83,6 @@ public class GameManager : MonoBehaviour
         currentPlayerPositionOnTile = stage.moveObjPositionOnTile[player.gameObject];
         nextPlayerPositionOnTile = GetNextPlayerPositionOnTile(currentPlayerPositionOnTile,direction);
 
-        //これやらないとfallObjPosが上手く書き換わらない。バグる
         gimic.FallObjPos = currentPlayerPositionOnTile + Vector3Int.down;
 
         nextDire = direction;
@@ -160,7 +159,6 @@ public class GameManager : MonoBehaviour
         }
 
         // wallを壊す
-        // func = gimic.DestroyBlock;
         if (gimic.DestroyWall(nextPlayerPositionOnTile, oldPos.Count)) {
             nextPlayerPositionOnTile = currentPlayerPositionOnTile;
             return;
@@ -180,7 +178,6 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        // func = gimic.GetItem;
         gimic.GetItem(nextPlayerPositionOnTile, oldPos.Count);
 
         //移動先がブロックの場合(木箱)

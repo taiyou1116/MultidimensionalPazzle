@@ -98,31 +98,26 @@ public class StageManager : MonoBehaviour
                     TILE_TYPE tileType = tileAll[x,y,z];
 
                     // TILETYPEに合ったオブジェクトをインスタンス化
-                    if ((int)tileType != 9)
-                    {
+                    if ((int)tileType != 9) {
                         GameObject obj = Instantiate(prefabs[(int)tileType]);
                         obj.transform.position = new Vector3(x,y,z);
                         objList.Add(obj);
 
-                        if (tileType == TILE_TYPE.PLAYER)
-                        {
+                        if (tileType == TILE_TYPE.PLAYER) {
                             player = obj.GetComponent<PlayerManager>();
                             moveObjPositionOnTile.Add(obj,position);
                             playerHierarchy = y;
                         }
-                        if (tileType == TILE_TYPE.BLOCK || tileType == TILE_TYPE.FALLOBJ || tileType == TILE_TYPE.ITEM || tileType == TILE_TYPE.WALL)
-                        {
+                        if (tileType == TILE_TYPE.BLOCK || tileType == TILE_TYPE.FALLOBJ || tileType == TILE_TYPE.ITEM || tileType == TILE_TYPE.WALL) {
                             moveObjPositionOnTile.Add(obj,position);
                         }
-                        if (tileType == TILE_TYPE.GOAL)
-                        {
+                        if (tileType == TILE_TYPE.GOAL) {
                             key = obj;
                         }
                         maxHierarchy = y;
                     }
                     // GRASSの場合
-                    else
-                    {
+                    else {
                         int randomCount = Random.Range(9,13);
                         GameObject obj = Instantiate(prefabs[randomCount]);
                         obj.transform.position = new Vector3(x,y,z);
@@ -136,8 +131,7 @@ public class StageManager : MonoBehaviour
     }
     public void DestroyStage()
     {
-        foreach(var value in objList)
-        {
+        foreach(var value in objList) {
             Destroy(value.gameObject);
         }
         moveObjPositionOnTile = new Dictionary<GameObject, Vector3Int>();

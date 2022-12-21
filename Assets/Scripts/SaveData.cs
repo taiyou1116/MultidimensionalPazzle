@@ -10,7 +10,6 @@ public class SaveData : MonoBehaviour
     {
         DontDestroyOnLoad(this.gameObject);
         stageClears = new bool[30];
-        // PlayerPrefs.SetString("SAVE","FIRST");
         ShowStar();
     }
     public void ClearStage(int num)
@@ -21,8 +20,7 @@ public class SaveData : MonoBehaviour
     public void ShowStar()
     {
         Load();
-        for(int i = 0; i < stageClears.Length; i++)
-        {
+        for(int i = 0; i < stageClears.Length; i++) {
             if(stageClears[i]) stars[i].SetActive(true);
         }
     }

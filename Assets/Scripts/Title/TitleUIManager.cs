@@ -23,6 +23,7 @@ public class TitleUIManager : MonoBehaviour
     [SerializeField] GameObject mainPanel;
     [SerializeField] GameObject loginPanel;
     [SerializeField] GameObject newUserPanel;
+    [SerializeField] GameObject deleteConfirmPanel;
 
     // WEBCONNECT
     public GameObject errorPanel;
@@ -50,6 +51,7 @@ public class TitleUIManager : MonoBehaviour
     [SerializeField] Button[] backOnline;
     [SerializeField] Button[] optionchange;
     [SerializeField] Button[] pageButton;
+    [SerializeField] Button[] deleteConfirm;
 
     // WEBCONNECT
     [SerializeField] Button internetError;
@@ -203,6 +205,7 @@ public class TitleUIManager : MonoBehaviour
         errorPanel.SetActive(false);
         connectWebPanel.SetActive(false);
         dLPanel.SetActive(false);
+        deleteConfirmPanel.SetActive(false);
     }
     public void PanelsTrue()
     {
@@ -214,10 +217,10 @@ public class TitleUIManager : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
+            // ゲーム終了
             Application.Quit();
         }
     }
-
     
     private void NextPage()
     {
