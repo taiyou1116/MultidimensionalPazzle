@@ -13,10 +13,12 @@ public class ChangeStage : MonoBehaviour
     public List<Transform> pickaxeObj;
     [SerializeField] CinemachineVirtualCamera camera2D;
     [SerializeField] Camera camera2DObj;
+    [SerializeField] GameObject camera3D;
     public CinemachineVirtualCamera[] virtualCamera;
     public CinemachineBrain cinemachineBrain;
     private int cameraNumber;
     public bool stage2D{get; private set;}
+    private bool one;
     public int CameraNumber{get{return cameraNumber;}}
     
     public void GetObj()
@@ -53,6 +55,7 @@ public class ChangeStage : MonoBehaviour
             camera2D.Priority = -1;
             camera2DObj.depth = -1;
             stage2D = false;
+            
             foreach(var mesh in meshs) {
                 mesh.receiveShadows = true;
             }
@@ -69,26 +72,25 @@ public class ChangeStage : MonoBehaviour
             foreach (var value in pickaxeObj) {
                 value.gameObject.SetActive(true);
             }
-
             Sounds.instance.se[5].Play();
+            return;
         }
-        else if(!stage2D) {
-            camera2DObj.transform.eulerAngles = CameraSet(cameraNumber);
-            camera2D.transform.eulerAngles = CameraSet(cameraNumber);
-            camera2D.Priority = 2;
-            StartCoroutine(ThreeToTwo());
-        }
+        // 3Dの場合
+        one = false;
+        stage2D = true;
+        camera2DObj.transform.eulerAngles = CameraSet(cameraNumber);
+        camera2D.transform.eulerAngles = CameraSet(cameraNumber);
+        camera2D.Priority = 2;
     }
 
-    private IEnumerator ThreeToTwo()
+    private void Update()
     {
-        yield return new WaitForSeconds(1f);
-        if (!stage2D) {
+        if (stage2D && one) return;
+        if (camera3D.transform.position == new Vector3Int(4,10,4) && !one) {
+            one = true;
             camera2DObj.depth = 1;
-            stage2D = true;
-
-            foreach(var mesh in meshs)
-            {
+            // stage2D = true;
+            foreach (var mesh in meshs) {
                 mesh.receiveShadows = false;
             }
 
@@ -102,17 +104,14 @@ public class ChangeStage : MonoBehaviour
             foreach (var value in pickaxeObj) {
                 value.gameObject.SetActive(false);
             }
-
             children[2].gameObject.SetActive(true);
-
             Sounds.instance.se[6].Play();
         }
     }
     
     private Vector3 CameraSet(int num)
     {
-        switch (num)
-        {
+        switch (num) {
             case 0:
             return new Vector3(90,0,0);
             case 1:
@@ -128,12 +127,12 @@ public class ChangeStage : MonoBehaviour
     public void ChangeCameraRight()//視点変更(右)
     {
         if(stage2D) return;
-        foreach(var value in virtualCamera)
+        foreach (var value in virtualCamera)
         {
             value.Priority = 0;//全てオフ
         }
         cameraNumber++;
-        if(cameraNumber >= 4)
+        if (cameraNumber >= 4)
         {
             cameraNumber = 0;
         }
@@ -142,13 +141,13 @@ public class ChangeStage : MonoBehaviour
     }
     public void ChangeCameraLeft()//視点変更(右)
     {
-        if(stage2D) return;
-        foreach(var value in virtualCamera)
+        if (stage2D) return;
+        foreach (var value in virtualCamera)
         {
             value.Priority = 0;//全てオフ
         }
         cameraNumber--;
-        if(cameraNumber <= -1)
+        if (cameraNumber <= -1)
         {
             cameraNumber = 3;
         }

@@ -7742,7 +7742,6 @@ MonoBehaviour:
   gimic: {fileID: 741271449}
   textAnim: {fileID: 2009145838}
   textAnimonline: {fileID: 1389937730}
-  operation: {fileID: 0}
   transparentMaterial: {fileID: 2100000, guid: d6ca4e2b9d730d343b0a775cb0a5e376, type: 2}
   opaqueMaterial: {fileID: 2100000, guid: 9974d02327447a14696676e6ff052b54, type: 2}
 --- !u!4 &884074577
@@ -8187,7 +8186,6 @@ GameObject:
   - component: {fileID: 963194229}
   - component: {fileID: 963194230}
   - component: {fileID: 963194231}
-  - component: {fileID: 963194232}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -8344,19 +8342,6 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
---- !u!114 &963194232
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 963194225}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1de6bdbf9e77594380888206ed25575, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  a: 1
 --- !u!1 &966519721
 GameObject:
   m_ObjectHideFlags: 0
@@ -16204,6 +16189,7 @@ MonoBehaviour:
   pickaxeObj: []
   camera2D: {fileID: 1422911173}
   camera2DObj: {fileID: 1038285370}
+  camera3D: {fileID: 963194225}
   virtualCamera:
   - {fileID: 1349862227}
   - {fileID: 819784896}
