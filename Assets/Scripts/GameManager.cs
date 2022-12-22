@@ -9,7 +9,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] MoveGimic gimic;
     [SerializeField] TextAnim textAnim;
     [SerializeField] TextAnim textAnimonline;
-    [SerializeField] BasicOperation operation;
     private ChangeStage changeStage;
     private MainUI mainUI;
     private StageManager stage;
@@ -484,8 +483,8 @@ public class GameManager : MonoBehaviour
     
     private void PlayerOperation()
     {
-        operation.PageUpdate();
-        if (goal || operation.Operation || stage.rotateNow) return;
+        mainUI.PageUpdate();
+        if (goal || mainUI.operation || stage.rotateNow) return;
         
         // PUTWALL
         if (Input.GetKeyDown(KeyCode.Space))
@@ -673,8 +672,8 @@ public class GameManager : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.T))
         {
-            operation.Operation = true;
-            operation.ShowOperationPanel();
+            mainUI.operation = true;
+            mainUI.ShowOperationPanel();
         }
     }
     

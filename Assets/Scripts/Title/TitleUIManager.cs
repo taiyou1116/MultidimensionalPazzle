@@ -53,9 +53,6 @@ public class TitleUIManager : MonoBehaviour
     [SerializeField] Button[] pageButton;
     [SerializeField] Button[] deleteConfirm;
 
-    // WEBCONNECT
-    [SerializeField] Button internetError;
-    [SerializeField] Button loginError;
     [SerializeField] Button createStage;
 
     // RESISTER
@@ -111,19 +108,6 @@ public class TitleUIManager : MonoBehaviour
         pageButton[1].onClick.AddListener(() => {
             NextPage();
         });
-
-        // back処理
-        backTitle.onClick.AddListener(() => {
-            ShowPanel(titlePanel);
-            titleImage.SetActive(true);
-        });
-        BackMain();
-        backOnline[0].onClick.AddListener(() => {
-            ShowPanel(onlinePanel);
-        });
-        backOnline[1].onClick.AddListener(() => {
-            ShowPanel(onlinePanel);
-        });
         optionchange[0].onClick.AddListener(() => {
             ShowOptionPanel(0);
         });
@@ -133,44 +117,25 @@ public class TitleUIManager : MonoBehaviour
         optionchange[2].onClick.AddListener(() => {
             ShowOptionPanel(2);
         });
-
-        // ONLINE
-        internetError.onClick.AddListener(() => {
-            errorPanel.SetActive(false);
-            foreach(var value in errorPanels) {
-                value.SetActive(false);
-            }
-        });
-        loginError.onClick.AddListener(() => {
-            errorPanel.SetActive(false);
-            foreach(var value in errorPanels) {
-                value.SetActive(false);
-            }
+        backTitle.onClick.AddListener(() => {
+            ShowPanel(titlePanel);
+            titleImage.SetActive(true);
         });
         createStage.onClick.AddListener(() => {
             PlayerPrefs.SetString("MODE", "EDIT");
             StartCoroutine(WaitProcess());
         });
-
-        // RESISTER
-        newUser[0].onClick.AddListener(() => {
-            errorPanel.SetActive(false);
-            foreach(var value in errorPanels) {
-                value.SetActive(false);
-            }
+        BackMain();
+        BackOnline();
+        Resister();
+    }
+    private void BackOnline()
+    {
+        foreach (var value in backOnline) {
+            value.onClick.AddListener(() => {
+            ShowPanel(onlinePanel);
         });
-        newUser[1].onClick.AddListener(() => {
-            errorPanel.SetActive(false);
-            foreach(var value in errorPanels) {
-                value.SetActive(false);
-            }
-        });
-        newUser[2].onClick.AddListener(() => {
-            errorPanel.SetActive(false);
-            foreach(var value in errorPanels) {
-                value.SetActive(false);
-            }
-        });
+        }
     }
 
     private void BackMain()
@@ -179,6 +144,17 @@ public class TitleUIManager : MonoBehaviour
             value.onClick.AddListener(() => {
             ShowPanel(mainPanel);
         });
+        }
+    }
+    private void Resister()
+    {
+        foreach (var value in newUser) {
+            value.onClick.AddListener(() => {
+                errorPanel.SetActive(false);
+                foreach(var value in errorPanels) {
+                    value.SetActive(false);
+                }
+            });
         }
     }
     private IEnumerator WaitProcess()
@@ -324,8 +300,7 @@ public class TitleUIManager : MonoBehaviour
         int layerCount = 0;
         int fiishCount = 0;
 
-        for(int i = 0; i < stageData.Length; i++)
-        {
+        for(int i = 0; i < stageData.Length; i++) {
             rows += stageData[i] + ",";
             count++;
             if (count == 9 && layerCount == 8 && fiishCount == 5)
@@ -333,8 +308,7 @@ public class TitleUIManager : MonoBehaviour
                 string result = rows.Substring(0, rows.Length - 1);
                 sw.Write(result + "\n");
             }
-            else if (layerCount == 8 && count == 9) //i % 8 == 0 && i != 0
-            {
+            else if (layerCount == 8 && count == 9) {
                 string result = rows.Substring(0, rows.Length - 1) + ".";
                 sw.Write(result + "\n");// ファイルに書き出したあと改行
                 rows = "";
@@ -343,8 +317,7 @@ public class TitleUIManager : MonoBehaviour
                 layerCount = 0;
                 fiishCount++;
             }
-            else if (count == 9)
-            {
+            else if (count == 9) {
                 string result = rows.Substring(0, rows.Length - 1);
                 sw.WriteLine(result);// ファイルに書き出したあと改行
                 rows = "";

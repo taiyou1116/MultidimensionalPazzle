@@ -36,7 +36,9 @@ public class MainUI : MonoBehaviour
     [SerializeField] Text stageName;
     public Text pickaxeText;
     public Text stoneText;
-
+    // 変数
+    public bool operation{get; set;}
+    private int pageNum = 0;
 
     void Start()
     {
@@ -71,6 +73,50 @@ public class MainUI : MonoBehaviour
         sequence.Append(blackImage.DOFade(1,0.5f).SetEase(Ease.Linear))
                 .Append(blackImage.DOFade(0,0.5f).SetEase(Ease.Linear).SetDelay(1.5f))
                 .AppendCallback(() => blackImage.gameObject.SetActive(false));
+    }
+
+    public void ShowOperationPanel()
+    {
+        operationPanel.SetActive(true);
+        Sounds.instance.se[11].Play();
+    }
+    public void CloseOperationPanel()
+    {
+        operationPanel.SetActive(false);
+        Sounds.instance.se[11].Play();
+    }
+    public void PageUpdate()
+    {
+        if (!operation) return;
+        if (Input.GetKeyDown(KeyCode.RightArrow)) {
+            if (pageNum == 2) return;
+            pageNum++;
+            ShowPage();
+            Sounds.instance.se[4].Play();
+            if (pageNum == 2) pageArrow[0].SetActive(false);
+        }
+        if (Input.GetKeyDown(KeyCode.LeftArrow)) {
+            if (pageNum == 0) return;
+            pageNum--;
+            ShowPage();
+            Sounds.instance.se[4].Play();
+            if (pageNum == 0) pageArrow[1].SetActive(false);
+        }
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            operation = false;
+            CloseOperationPanel();
+        }
+        
+    }
+    private void ShowPage()
+    {
+        foreach (var value in pages) {
+            value.SetActive(false);
+        }
+        foreach (var value in pageArrow) {
+            value.SetActive(true);
+        }
+        pages[pageNum].SetActive(true);
     }
 
     public void EndStage()

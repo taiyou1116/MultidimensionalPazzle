@@ -22624,13 +22624,13 @@ MonoBehaviour:
   deleteConfirm:
   - {fileID: 1656824815}
   - {fileID: 551501936}
-  internetError: {fileID: 939178707}
-  loginError: {fileID: 1113063061}
   createStage: {fileID: 1357019765}
   newUser:
   - {fileID: 1994801616}
   - {fileID: 893945300}
   - {fileID: 323970702}
+  - {fileID: 939178707}
+  - {fileID: 1113063061}
 --- !u!1 &1449336967
 GameObject:
   m_ObjectHideFlags: 0

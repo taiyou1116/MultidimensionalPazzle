@@ -7742,7 +7742,7 @@ MonoBehaviour:
   gimic: {fileID: 741271449}
   textAnim: {fileID: 2009145838}
   textAnimonline: {fileID: 1389937730}
-  operation: {fileID: 1940628039}
+  operation: {fileID: 0}
   transparentMaterial: {fileID: 2100000, guid: d6ca4e2b9d730d343b0a775cb0a5e376, type: 2}
   opaqueMaterial: {fileID: 2100000, guid: 9974d02327447a14696676e6ff052b54, type: 2}
 --- !u!4 &884074577
@@ -16802,7 +16802,6 @@ GameObject:
   - component: {fileID: 1940628035}
   - component: {fileID: 1940628034}
   - component: {fileID: 1940628038}
-  - component: {fileID: 1940628039}
   m_Layer: 5
   m_Name: Canvas(MainUI)
   m_TagString: Untagged
@@ -16940,19 +16939,6 @@ MonoBehaviour:
   stageName: {fileID: 1560864884}
   pickaxeText: {fileID: 644823425}
   stoneText: {fileID: 176924480}
---- !u!114 &1940628039
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1940628033}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e44458bd6eb3df4583104cc4fa347ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mainUI: {fileID: 1940628038}
 --- !u!1 &1963201145
 GameObject:
   m_ObjectHideFlags: 0
