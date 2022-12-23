@@ -18,7 +18,7 @@ public class ChangeStage : MonoBehaviour
     public CinemachineBrain cinemachineBrain;
     private int cameraNumber;
     public bool stage2D{get; private set;}
-    private bool one;
+    public bool one{get; private set;}
     public int CameraNumber{get{return cameraNumber;}}
     
     public void GetObj()
@@ -89,7 +89,6 @@ public class ChangeStage : MonoBehaviour
         if (camera3D.transform.position == new Vector3Int(4,10,4) && !one) {
             one = true;
             camera2DObj.depth = 1;
-            // stage2D = true;
             foreach (var mesh in meshs) {
                 mesh.receiveShadows = false;
             }

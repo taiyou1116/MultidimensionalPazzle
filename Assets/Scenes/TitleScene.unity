@@ -22581,6 +22581,7 @@ MonoBehaviour:
   loginPanel: {fileID: 1470454124}
   newUserPanel: {fileID: 506940772}
   deleteConfirmPanel: {fileID: 506605736}
+  startText: {fileID: 113810585}
   errorPanel: {fileID: 2093594149}
   errorPanels:
   - {fileID: 222444856}
@@ -29900,7 +29901,6 @@ GameObject:
   - component: {fileID: 1986506360}
   - component: {fileID: 1986506362}
   - component: {fileID: 1986506361}
-  - component: {fileID: 1986506363}
   m_Layer: 5
   m_Name: titlePanel
   m_TagString: Untagged
@@ -29970,19 +29970,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1986506359}
   m_CullTransparentMesh: 1
---- !u!114 &1986506363
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1986506359}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8cfd1322842df1a47b4ff081202035b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startText: {fileID: 113810585}
 --- !u!1 &1990095893
 GameObject:
   m_ObjectHideFlags: 0

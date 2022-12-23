@@ -516,6 +516,8 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        // アニメーション中は動作不可
+        if (!changeStage.one && changeStage.stage2D) return;
         // MOVE
         if (changeStage.CameraNumber == 0)
         {

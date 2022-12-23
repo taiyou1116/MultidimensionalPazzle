@@ -23,7 +23,7 @@ public class TitleUIManager : MonoBehaviour
     [SerializeField] GameObject mainPanel;
     [SerializeField] GameObject loginPanel;
     [SerializeField] GameObject newUserPanel;
-    [SerializeField] GameObject deleteConfirmPanel;
+    [SerializeField] GameObject startText;
 
     // WEBCONNECT
     public GameObject errorPanel;
@@ -51,7 +51,6 @@ public class TitleUIManager : MonoBehaviour
     [SerializeField] Button[] backOnline;
     [SerializeField] Button[] optionchange;
     [SerializeField] Button[] pageButton;
-    [SerializeField] Button[] deleteConfirm;
 
     [SerializeField] Button createStage;
 
@@ -66,6 +65,11 @@ public class TitleUIManager : MonoBehaviour
         MainForOnline.Instance.Initialize();
         titlePanel.SetActive(true);
         titleImage.SetActive(true);
+
+        // クリックしてスタートのアニメーション
+        startText.transform.DOScale(1.3f, 1f)
+                           .SetEase(Ease.OutBounce)
+                           .SetLoops(-1, LoopType.Yoyo);
 
         showStagePanelButton.onClick.AddListener(() => {
             ShowStagePanel();
@@ -181,7 +185,6 @@ public class TitleUIManager : MonoBehaviour
         errorPanel.SetActive(false);
         connectWebPanel.SetActive(false);
         dLPanel.SetActive(false);
-        deleteConfirmPanel.SetActive(false);
     }
     public void PanelsTrue()
     {
